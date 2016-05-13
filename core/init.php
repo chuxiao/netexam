@@ -22,10 +22,6 @@ define('CORE', dirname(__FILE__));
 
 //系统配置
 require CORE.'/../config/inc_config.php';
-require CORE.'/../config/inc_user_api.php';
-require CORE.'/../config/inc_game_list.php';
-require CORE.'/../config/inc_payment.php';
-require CORE.'/../config/inc_config_can.php';
 //外部请求程序处理(路由)
 require CORE.'/req.php';
 req::init();
@@ -40,7 +36,6 @@ require CORE.'/tpl.php';
 require CORE.'/log.php';
 require CORE.'/cache.php';
 require CORE.'/common.php'; //公共信息
-require CORE.'/../admin/include/admin_common.php'; //后台函数库
 //debug设置
 $_debug_safe_ip = false;
 require PATH_LIBRARY.'/debug/lib_debug.php';
@@ -59,11 +54,7 @@ register_shutdown_function('handler_php_shutdown');
 
 //session接口(使用session前需自行调用session_start)
 require CORE.'/session.php';
-$my111g = new ctl_common();
-$my111g->get_left_active();
-$my111g->play_histories();
-$my111g->get_userinfo();
-//$my111g->access_log();
+
 /**
  * 程序结束后执行的动作
  */
@@ -96,7 +87,7 @@ function handler_fatal_error( $errtype, $msg )
     {
         log::add('fatal_error', $msg);
         //header ( "location:/404.html" );
-        //exit();
+        exit();
     }
 }
 
@@ -187,10 +178,3 @@ function request($key, $df='')
 {
     return req::item($key, $df);
 }
-
-/**
-if(util::getAddr()=="贵州" || util::getAddr()=="广州" || util::getAddr()=="武汉")
-{
-exit;
-}
- */
