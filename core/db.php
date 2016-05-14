@@ -193,7 +193,7 @@ class db
             }
             if (self::$cur_result === false)
             {
-                throw new Exception(mysql_error());
+                throw new Exception("Mysql query error: ".$sql);
                 return false;
             }
             else
