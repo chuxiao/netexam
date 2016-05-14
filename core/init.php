@@ -155,7 +155,7 @@ function __autoload( $classname )
         {
             require PATH_MODEL.'/'.$classfile;
         }
-        else if( file_exists ( require PATH_ROOT.'/model/'.$classfile ) )
+        else if( file_exists ( PATH_ROOT.'/model/'.$classfile ) )
         {
             require PATH_ROOT.'/model/'.$classfile;
         }
