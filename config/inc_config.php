@@ -4,7 +4,7 @@ if( !defined('CORE') ) exit('Request Error!');
 //-------------------------------------------------------------
 //基本常量
 //-------------------------------------------------------------
-define('OPEN_DEBUG', false);
+define('OPEN_DEBUG', true);
 
 //如果开启了debug模式，仍然不想显示debug的信息（通常是ajax/api类接口），可以在操作的页面或控制器中把这个变量改为 true
 define('DEBUG_HIDDEN', false);

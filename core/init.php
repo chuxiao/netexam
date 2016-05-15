@@ -116,7 +116,7 @@ function run_controller()
         {
             throw new Exception ( "Contrl {$ctl}--{$path_file} is not exists!" );
         }
-        if( method_exists ( $ctl, $ac ) === true )
+        if( method_exists ( $ctl, $ac ) === TRUE )
         {
             $instance = new $ctl ( );
             $instance->$ac ();
