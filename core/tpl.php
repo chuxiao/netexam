@@ -21,14 +21,12 @@ class tpl
         {
             require_once PATH_LIBRARY . '/smarty/libs/Smarty.class.php';
             self::$instance = new Smarty();
-            self::$instance->template_dir = util::path_exists(PATH_ROOT . '/templates/template/');
-            self::$instance->compile_dir = util::path_exists(PATH_ROOT . '/templates/compile/');
-            self::$instance->cache_dir = util::path_exists(PATH_ROOT . '/templates/cache/');
+            self::$instance->template_dir = util::path_exists(PATH_ROOT . '/templates/');
+            self::$instance->compile_dir = util::path_exists(PATH_ROOT . '/templates_c/');
             self::$instance->left_delimiter = '<{';
             self::$instance->right_delimiter = '}>';
             self::$instance->caching = false;
             self::$instance->compile_check = true;
-            self::$instance->plugins_dir[] = util::path_exists(PATH_LIBRARY . '/smarty_plugins');
             self::config();
         }
         return self::$instance;
@@ -36,7 +34,6 @@ class tpl
 
     protected static function config ()
     {
-        $instance = self::init();
         $instance->assign('URL_STATIC', URL.'/static');
         $instance->assign('URL', URL);
         //config文件配置
@@ -54,24 +51,10 @@ class tpl
 
     public static function display ($tpl, $is_debug_mt=true)
     {
-        /*$instance = self::init();
-        $app_tpldir = empty(self::$appname) ? '' : self::$appname.'/';
-        $instance->display($app_tpldir.$tpl);*/
-        $html = self::fetch($tpl);
-        if ($GLOBALS['config']['use_rewrite'])
-        {
-            cls_rewrite::convert_html($html);
-        }
-        echo $html;
+        $instance = self::init();
+        $instance->display($tpl);
         if( $is_debug_mt && PHP_SAPI !== 'cli' ) {
             debug_hanlde_xhprof();
         }
-    }
-
-    public static function fetch($tpl)
-    {
-        $instance = self::init();
-        $app_tpldir = empty(self::$appname) ? '' : self::$appname.'/';
-        return $instance->fetch($app_tpldir.$tpl);
     }
 }
