@@ -34,6 +34,7 @@ class tpl
 
     protected static function config ()
     {
+        $instance = self::init();
         $instance->assign('URL_STATIC', URL.'/static');
         $instance->assign('URL', URL);
         //config文件配置
