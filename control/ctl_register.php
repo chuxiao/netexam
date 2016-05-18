@@ -23,7 +23,7 @@ class ctl_register
         // TODO:
     }
 
-    public function verify_code()
+    public function verifycode()
     {
         $code = new mod_captcha;
         $code->code = $code->make_seccode();                           // 验证码

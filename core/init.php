@@ -138,6 +138,7 @@ function run_controller()
  * (如果不在这些位置, 则需自行手工加载，对于小型项目，也可以把model全放到library以减少类文件查找时间)
  * @return void
  */
+spl_autoload_register("__autoload");
 function __autoload( $classname )
 {
     $classname = preg_replace("/[^0-9a-z_]/i", '', $classname);
