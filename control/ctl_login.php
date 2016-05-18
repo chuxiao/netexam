@@ -15,10 +15,27 @@ class ctl_login
 
     public function index()
     {
+        $time = time();
+        tpl::assign("time", $time);
         tpl::display("login.tpl");
     }
 
     public function auth()
+    {
+        // TODO:
+    }
+
+    public function find_passwd()
+    {
+        tpl::display("login.find_passwd.tpl");
+    }
+
+    public function auth2()
+    {
+        // TODO:
+    }
+
+    public function reset_passwd()
     {
         // TODO:
     }

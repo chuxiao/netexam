@@ -37,8 +37,6 @@ class tpl
         $instance = self::init();
         $instance->assign('URL_STATIC', URL.'/static');
         $instance->assign('URL', URL);
-        //config文件配置
-        $instance->assign('site_name', $GLOBALS['config']['site']['name']);
     }
 
     public static function assign ($tpl_var, $value)
