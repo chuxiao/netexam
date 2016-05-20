@@ -1,6 +1,6 @@
 <{include file="header.tpl"}>
 <div id="login_form">
-    <form method="post" action="/?ct=login&ac=auth">
+    <form method="post" action="login/check_user">
         <div id="account_area">
             <label for="account">手机号: </label>
             <input id="account" name="account" type="text"></input>
@@ -15,7 +15,7 @@
             <span class="verify_image"><img id="code_img" src="/?ct=register&ac=verifycode&time=<{$time}>" title="看不清，请点击重试" onClick="change_code()" height="25" width="76" /></span><a href="#" onClick="change_code()">换一个</a>
         </div>
         <div id="commit_area">
-            <input id="login_btn" type="submit" value="登录"></input>
+            <input id="login_btn" type="submit" value="Login"></input>
         </div>
     </form>
     <a href="/?ct=login&ac=find_passwd">找回密码?</a>

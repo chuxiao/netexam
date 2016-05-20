@@ -30,32 +30,26 @@ class pub_mod_auth
      */
     public static function authenticate($data, $is_register = false)
     {
-        //如果是直接登陆，而不是注册完连带的登陆，就要验证码
-		/*
         if (!$is_register)
         {
             // 验证码不能为空
-            if($data['from'] != "dm")
+            if (empty($data['code']))
             {
-	            if (empty($data['code']))
-	            {
-	                throw new Exception(serialize(array('code' => '验证码不能为空')));
-	            }
-	            else
-	            {
-	                $code = new mod_captcha;
-	                $value  = $code->authcode($_COOKIE['captcha'], 'DECODE', $GLOBALS['config']['cookie_pwd']);
-	                if (strtolower($data['code'])!=strtolower($value))
-	                {
-	                    throw new Exception(serialize(array('code' => '验证码不正确或超时')));
-	                }
-	            }
+                throw new Exception(serialize(array('code' => '验证码不能为空')));
+            }
+            else
+            {
+                $code = new mod_captcha;
+                $value  = $code->authcode($_COOKIE['captcha'], 'DECODE', $GLOBALS['config']['cookie_pwd']);
+                if (strtolower($data['code'])!=strtolower($value))
+                {
+                    throw new Exception(serialize(array('code' => '验证码不正确或超时')));
+                }
             }
         }
-		*/
         if (empty($data['account']))
         {
-            throw new Exception(serialize(array('account' => '请输入用户名')));
+            throw new Exception(serialize(array('account' => '请输入手机呈码')));
         }
 
         if (empty($data['passwd']))
@@ -121,8 +115,8 @@ class pub_mod_auth
         self::$curr_user['user_name'] = $result['user_name'];
         self::$curr_user['email'] = $result['email'];
         self::$curr_user['email_verify'] = isset($result['email_verify']) ? $result['email_verify'] : 0;
-		self::$curr_user['gender'] = isset($result['gender']) ? $result['gender'] : 1;
-		self::$curr_user['face'] = !empty($result['face']) ? "/static/uploads/small/".$result['face']."_small.jpg" : "/static/images/tx50.png";
+        self::$curr_user['gender'] = isset($result['gender']) ? $result['gender'] : 1;
+        self::$curr_user['face'] = !empty($result['face']) ? "/static/uploads/small/".$result['face']."_small.jpg" : "/static/images/tx50.png";
         /*
         // 记录登陆队列
         $params_login = array();

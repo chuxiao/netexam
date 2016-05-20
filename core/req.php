@@ -16,7 +16,7 @@ class req
 
     //把GET、POST的变量合并一块，相当于 _REQUEST
     public static $forms = array();
-    
+
     //_GET 变量
     public static $gets = array();
 
@@ -28,29 +28,29 @@ class req
 
     //文件变量
     public static $files = array();
-    
+
     //url_rewrite
     public static $url_rewrite = false;
-    
+
     //严禁保存的文件名
     public static $filter_filename = '/\.(php|pl|sh|js)$/i';
 
-   /**
-    * 初始化用户请求
-    * 对于 post、get 的数据，会转到 selfforms 数组， 并删除原来数组
-    * 对于 cookie 的数据，会转到 cookies 数组，但不删除原来数组
-    */
+    /**
+     * 初始化用户请求
+     * 对于 post、get 的数据，会转到 selfforms 数组， 并删除原来数组
+     * 对于 cookie 的数据，会转到 cookies 数组，但不删除原来数组
+     */
     public static function init()
     {
         //命令行模式
         if( empty($_SERVER['REQUEST_METHOD']) ) {
             return false;
         }
-        
+
         //默认参数
         $magic_quotes_gpc = ini_get('magic_quotes_gpc');
         self::$url_rewrite = isset($GLOBALS['config']['use_rewrite']) ? $GLOBALS['config']['use_rewrite'] : false;
-        
+
         //处理post、get
         self::$request_mdthod = '';
         if( $_SERVER['REQUEST_METHOD']=='GET' ) {
@@ -70,22 +70,22 @@ class req
         {
             foreach($request_arr as $k => $v)
             {
-                 if( preg_match('/^config/i', $k) ) {
-                     throw new Exception('request var name not alllow!');
-                     exit();
-	             }
-	             if( !$magic_quotes_gpc ) {
-	                 self::add_s( $v );
-	             }
-                 self::$forms[$k] = $v;
-                 if( self::$request_mdthod=='POST' ) {
-                     self::$posts[$k] = $v;
-                 } else if( self::$request_mdthod=='GET' ) {
-                     self::$gets[$k] = $v;
-                 }
+                if( preg_match('/^config/i', $k) ) {
+                    throw new Exception('request var name not alllow!');
+                    exit();
+                }
+                if( !$magic_quotes_gpc ) {
+                    self::add_s( $v );
+                }
+                self::$forms[$k] = $v;
+                if( self::$request_mdthod=='POST' ) {
+                    self::$posts[$k] = $v;
+                } else if( self::$request_mdthod=='GET' ) {
+                    self::$gets[$k] = $v;
+                }
             }
         }
-        
+
         //处理url_rewrite(暂时不实现)
         if( self::$url_rewrite )
         {
@@ -95,11 +95,11 @@ class req
                 $gstr = empty($_SERVER['PATH_INFO']) ? '' : $_SERVER['PATH_INFO'];
             }
         }
-        
+
         //默认ac和ct
         self::$forms['ct'] = isset(self::$forms['ct']) ? self::$forms['ct'] : 'index';
         self::$forms['ac'] = isset(self::$forms['ac']) ? self::$forms['ac'] : 'index';
-        
+
         //处理cookie
         if( count($_COOKIE) > 0 )
         {
@@ -111,7 +111,7 @@ class req
                 self::$cookies[$k] = $v;
             }
         }
-        
+
         //上传的文件处理
         if( isset($_FILES) && count($_FILES) > 0 )
         {
@@ -122,7 +122,7 @@ class req
         }
 
     }
-    
+
     //强制要求对gpc变量进行转义处理
     public static function add_s( &$array )
     {
@@ -139,17 +139,17 @@ class req
         }
     }
 
-   /**
-    * 把 eval 重命名为 myeval
-    */
+    /**
+     * 把 eval 重命名为 myeval
+     */
     public static function myeval( $phpcode )
     {
         return eval( $phpcode );
     }
 
-   /**
-    * 获得指定表单值
-    */
+    /**
+     * 获得指定表单值
+     */
     public static function item( $formname, $defaultvalue = '', $vartype = '' )
     {
         $v = isset(self::$forms[$formname]) ? self::$forms[$formname] :  $defaultvalue;
@@ -170,17 +170,17 @@ class req
         return $v;
     }
 
-   /**
-    * 获得指定临时文件名值
-    */
+    /**
+     * 获得指定临时文件名值
+     */
     public static function upfile( $formname, $defaultvalue = '' )
     {
         return isset(self::$files[$formname]['tmp_name']) ? self::$files[$formname]['tmp_name'] :  $defaultvalue;
     }
 
-   /**
-    * 过滤文件相关
-    */
+    /**
+     * 过滤文件相关
+     */
     public static function filter_files( &$files )
     {
         foreach($files as $k=>$v)
@@ -190,9 +190,9 @@ class req
         unset($_FILES);
     }
 
-   /**
-    * 移动上传的文件
-    */
+    /**
+     * 移动上传的文件
+     */
     public static function move_upload_file( $formname, $filename, $filetype = '' )
     {
         if( self::is_upload_file( $formname ) )
@@ -208,48 +208,48 @@ class req
         }
     }
 
-   /**
-    * 获得文件的扩展名
-    */
+    /**
+     * 获得文件的扩展名
+     */
     public static function get_shortname( $formname )
     {
         $filetype = strtolower(isset(self::$files[$formname]['type']) ? self::$files[$formname]['type'] : '');
         $shortname = '';
         switch($filetype)
         {
-            case 'image/jpeg':
-                $shortname = 'jpg';
-                break;
-            case 'image/pjpeg':
-                $shortname = 'jpg';
-                break;
-            case 'image/gif':
-                $shortname = 'gif';
-                break;
-            case 'image/png':
-                $shortname = 'png';
-                break;
-            case 'image/xpng':
-                $shortname = 'png';
-                break;
-            case 'image/wbmp':
-                $shortname = 'bmp';
-                break;
-            default:
-                $filename = isset(self::$files[$formname]['name']) ? self::$files[$formname]['name'] : '';
-                if( preg_match("/\./", $filename) )
-                {
-                    $fs = explode('.', $filename);
-                    $shortname = strtolower($fs[ count($fs)-1 ]);
-                }
-                break;
+        case 'image/jpeg':
+            $shortname = 'jpg';
+            break;
+        case 'image/pjpeg':
+            $shortname = 'jpg';
+            break;
+        case 'image/gif':
+            $shortname = 'gif';
+            break;
+        case 'image/png':
+            $shortname = 'png';
+            break;
+        case 'image/xpng':
+            $shortname = 'png';
+            break;
+        case 'image/wbmp':
+            $shortname = 'bmp';
+            break;
+        default:
+            $filename = isset(self::$files[$formname]['name']) ? self::$files[$formname]['name'] : '';
+            if( preg_match("/\./", $filename) )
+            {
+                $fs = explode('.', $filename);
+                $shortname = strtolower($fs[ count($fs)-1 ]);
+            }
+            break;
         }
         return $shortname;
     }
 
-   /**
-    * 获得指定文件表单的文件详细信息
-    */
+    /**
+     * 获得指定文件表单的文件详细信息
+     */
     public static function get_file_info( $formname, $item = '' )
     {
         if( !isset( self::$files[$formname]['tmp_name'] ) )
@@ -269,9 +269,9 @@ class req
         }
     }
 
-   /**
-    * 判断是否存在上传的文件
-    */
+    /**
+     * 判断是否存在上传的文件
+     */
     public static function is_upload_file( $formname )
     {
         if( !isset( self::$files[$formname]['tmp_name'] ) )
@@ -283,7 +283,7 @@ class req
             return is_uploaded_file( self::$files[$formname]['tmp_name'] );
         }
     }
-    
+
     /**
      * 检查文件后缀是否为指定值
      *
