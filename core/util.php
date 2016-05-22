@@ -99,9 +99,9 @@ class util
         }
     }
 
-   /**
-    * 获得当前的Url
-    */
+    /**
+     * 获得当前的Url
+     */
     public static function get_cururl()
     {
         if(!empty($_SERVER["REQUEST_URI"]))
@@ -266,11 +266,11 @@ class util
         return $pages;
     }
 
-   /**
-    * utf8编码模式的中文截取2，单字节截取模式
-    * 这里不使用mbstring扩展
-    * @return string
-    */
+    /**
+     * utf8编码模式的中文截取2，单字节截取模式
+     * 这里不使用mbstring扩展
+     * @return string
+     */
     public static function utf8_substr($str, $slen, $startdd=0)
     {
         return mb_substr($str , $startdd , $slen , 'UTF-8');
@@ -448,7 +448,7 @@ class util
         //或
         /*$constellations = array(
             'Capricorn', 'Aquarius', 'Pisces', 'Aries', 'Taurus', 'Gemini',
-            'Cancer','Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius',);*/
+        'Cancer','Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius',);*/
 
         //设定星座结束日期的数组，用于判断
         $enddays = array(19, 18, 20, 20, 20, 21, 22, 22, 22, 22, 21, 21,);
@@ -591,66 +591,66 @@ class util
      * 0大于18岁，1小于18岁
      * gt18,判断是否大于18岁
      */
-	public static function gt18($user_id)
-	{
-		$user_info = pub_mod_user::get_one_user_details($user_id);
-		$reg_time = $user_info['reg_time'];  //如果2012.11.20以前用户不在追究验证
-		$time = mktime(0,0,0,11,20,2012);
-		$IDCard = $user_info['idcard'];
-		if($reg_time<$time)
-		{
-			return 0;exit;  //大于18
-		}elseif(empty($IDCard)){
-			return 1;exit;  //小于18
-		}else{
-			if(!preg_match("/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/",$IDCard) && !preg_match("/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}(\d|x|X)$/",$IDCard)){
-			  $flag=1;
-			 }else{
-			  if(strlen($IDCard)==18){
-			   $tyear=intval(substr($IDCard,6,4));
-			   $tmonth=intval(substr($IDCard,10,2));
-			   $tday=intval(substr($IDCard,12,2));
-			   if($tyear>date("Y")||$tyear<(date("Y")-100)){
-			    $flag=0;
-			   }
-			   elseif($tmonth<0||$tmonth>12){
-			    $flag=0;
-			   }
-			   elseif($tday<0||$tday>31){
-			    $flag=0;
-			   }else{
-			    $tdate=$tyear."-".$tmonth."-".$tday." 00:00:00";
-			    if((time()-mktime(0,0,0,$tmonth,$tday,$tyear))>18*365*24*60*60){
-			     $flag=0;
-			    }else{
-			     $flag=1;
-			    }
-			   }
-			  }elseif(strlen($IDCard)==15){
-			   $tyear=intval("19".substr($IDCard,6,2));
-			   $tmonth=intval(substr($IDCard,8,2));
-			   $tday=intval(substr($IDCard,10,2));
-			   if($tyear>date("Y")||$tyear<(date("Y")-100)){
-			    $flag=0;
-			   }
-			   elseif($tmonth<0||$tmonth>12){
-			    $flag=0;
-			   }
-			   elseif($tday<0||$tday>31){
-			    $flag=0;
-			   }else{
-			    $tdate=$tyear."-".$tmonth."-".$tday." 00:00:00";
-			    if((time()-mktime(0,0,0,$tmonth,$tday,$tyear))>18*365*24*60*60){
-			     $flag=0;
-			    }else{
-			     $flag=1;
-			    }
-			   }
-			  }
-			 }
-			 return $flag;
-		}
-	}
+    public static function gt18($user_id)
+    {
+        $user_info = pub_mod_user::get_one_user_details($user_id);
+        $reg_time = $user_info['reg_time'];  //如果2012.11.20以前用户不在追究验证
+        $time = mktime(0,0,0,11,20,2012);
+        $IDCard = $user_info['idcard'];
+        if($reg_time<$time)
+        {
+            return 0;exit;  //大于18
+        }elseif(empty($IDCard)){
+            return 1;exit;  //小于18
+        }else{
+            if(!preg_match("/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/",$IDCard) && !preg_match("/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}(\d|x|X)$/",$IDCard)){
+                $flag=1;
+            }else{
+                if(strlen($IDCard)==18){
+                    $tyear=intval(substr($IDCard,6,4));
+                    $tmonth=intval(substr($IDCard,10,2));
+                    $tday=intval(substr($IDCard,12,2));
+                    if($tyear>date("Y")||$tyear<(date("Y")-100)){
+                        $flag=0;
+                    }
+                    elseif($tmonth<0||$tmonth>12){
+                        $flag=0;
+                    }
+                    elseif($tday<0||$tday>31){
+                        $flag=0;
+                    }else{
+                        $tdate=$tyear."-".$tmonth."-".$tday." 00:00:00";
+                        if((time()-mktime(0,0,0,$tmonth,$tday,$tyear))>18*365*24*60*60){
+                            $flag=0;
+                        }else{
+                            $flag=1;
+                        }
+                    }
+                }elseif(strlen($IDCard)==15){
+                    $tyear=intval("19".substr($IDCard,6,2));
+                    $tmonth=intval(substr($IDCard,8,2));
+                    $tday=intval(substr($IDCard,10,2));
+                    if($tyear>date("Y")||$tyear<(date("Y")-100)){
+                        $flag=0;
+                    }
+                    elseif($tmonth<0||$tmonth>12){
+                        $flag=0;
+                    }
+                    elseif($tday<0||$tday>31){
+                        $flag=0;
+                    }else{
+                        $tdate=$tyear."-".$tmonth."-".$tday." 00:00:00";
+                        if((time()-mktime(0,0,0,$tmonth,$tday,$tyear))>18*365*24*60*60){
+                            $flag=0;
+                        }else{
+                            $flag=1;
+                        }
+                    }
+                }
+            }
+            return $flag;
+        }
+    }
 
     /**
      * 在二维数组中找第二维数组中，$key==$value 的
@@ -679,105 +679,136 @@ class util
         }
         return false;
     }
-	/**
-	 *
-	 * 限制ip访问游戏
-	 */
-	function ipallow()
-	{
-		$ip =  util::get_client_ip();
-		$tip = $GLOBALS['config']['ipallow'];
-		if(in_array($ip,$tip))
-		{
-			return true;
-		}else{
-			echo "<script>alert('未到开服时间')</script>";
-			exit();
-		}
-	}
-	/**
-	 *
-	 *修改配置文件
-	 *
-	 */
-	function get_config($file, $ini, $type="string")
+    /**
+     *
+     * 限制ip访问游戏
+     */
+    function ipallow()
     {
-		if(!file_exists($file))
-	    {
-			return false;
-	    }else{
-			$str = file_get_contents($file);
-			if ($type=="int"){
-				$config = preg_match("/".preg_quote($ini)."=(.*);/", $str, $res);
-				return $res[1];
-			} else{
-				$config = preg_match("/".preg_quote($ini)."=\"(.*)\";/", $str, $res);
+        $ip =  util::get_client_ip();
+        $tip = $GLOBALS['config']['ipallow'];
+        if(in_array($ip,$tip))
+        {
+            return true;
+        }else{
+            echo "<script>alert('未到开服时间')</script>";
+            exit();
+        }
+    }
+    /**
+     *
+     *修改配置文件
+     *
+     */
+    function get_config($file, $ini, $type="string")
+    {
+        if(!file_exists($file))
+        {
+            return false;
+        }else{
+            $str = file_get_contents($file);
+            if ($type=="int"){
+                $config = preg_match("/".preg_quote($ini)."=(.*);/", $str, $res);
+                return $res[1];
+            } else{
+                $config = preg_match("/".preg_quote($ini)."=\"(.*)\";/", $str, $res);
 
-			}
-		    return $res[1];
-		}
+            }
+            return $res[1];
+        }
     }
     function update_config($file, $ini, $value,$type="string"){
-		if(!file_exists($file))
-		{
-			return false;
-		}else{
-			$str = file_get_contents($file);
-			$str2="";
-			if($type=="int"){
-				$str2 = preg_replace("/".preg_quote($ini)."=(.*);/", $ini."=".$value.";",$str);
-			}else{
-				$str2 = preg_replace("/".preg_quote($ini)."=(.*);/",$ini."=\"".$value."\";",$str);
-			}
-			//echo preg_quote($ini);exit;
-			util::put_file($file, $str2);
-		}
-	}
+        if(!file_exists($file))
+        {
+            return false;
+        }else{
+            $str = file_get_contents($file);
+            $str2="";
+            if($type=="int"){
+                $str2 = preg_replace("/".preg_quote($ini)."=(.*);/", $ini."=".$value.";",$str);
+            }else{
+                $str2 = preg_replace("/".preg_quote($ini)."=(.*);/",$ini."=\"".$value."\";",$str);
+            }
+            //echo preg_quote($ini);exit;
+            util::put_file($file, $str2);
+        }
+    }
 
     function getExplorer() {
 
         if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 8.0"))
-        return "Explorer";
+            return "Explorer";
         else if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 7.0"))
-        return "Explorer";
+            return "Explorer";
         else if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 6.0"))
-        return "Explorer";
+            return "Explorer";
         else if(strpos($_SERVER["HTTP_USER_AGENT"],"Firefox/3"))
-        return "Firefox";
+            return "Firefox";
         else if(strpos($_SERVER["HTTP_USER_AGENT"],"Firefox/2"))
-        return "Firefox";
+            return "Firefox";
         else if(strpos($_SERVER["HTTP_USER_AGENT"],"Chrome"))
-        return "Chrome";
+            return "Chrome";
         else if(strpos($_SERVER["HTTP_USER_AGENT"],"Safari"))
-        return "Safari";
+            return "Safari";
         else if(strpos($_SERVER["HTTP_USER_AGENT"],"Opera"))
-        return "Opera";
+            return "Opera";
         else return $_SERVER["HTTP_USER_AGENT"];
     }
-   function randomkeys($length)
-   {
-     $pattern='1234567890abcdefhijklmnopqrstuvwxyzABCDEFHIJKLOMNOPQRSTUVWXYZ';
-     for($i=0;$i<$length;$i++)
-     {
-       $key .= $pattern{mt_rand(0,35)};    //生成php随机数
-     }
-     return $key;
-   }
- /**
-  *
-  *根据ip获取城市
-  */
-function getAddr()
-{
-    //$ip=mb_convert_encoding(file_get_contents("http://fw.qq.com/ipaddress"),"UTF-8", "GBK");
-    $ip=iconv("GB2312", "UTF-8", file_get_contents("http://int.dpool.sina.com.cn/iplookup/iplookup.php?ip=".util::get_client_ip()));
-    //echo $ip;exit;
-    $c=explode("	",$ip);
-    //print_r($c);exit;
-    return trim($c[4]);
- }
+    function randomkeys($length)
+    {
+        $pattern='1234567890abcdefhijklmnopqrstuvwxyzABCDEFHIJKLOMNOPQRSTUVWXYZ';
+        for($i=0;$i<$length;$i++)
+        {
+            $key .= $pattern{mt_rand(0,35)};    //生成php随机数
+        }
+        return $key;
+    }
 
+    /**
+     * IP转换为数字
+     *
+     */
+    function ipton($ip)
+    {
+        $ip_arr = explode('.', $ip);
+        foreach ($ip_arr as $value)
+        {
+            $iphex = dechex($value);
+            if (strlen($iphex) < 2)
+            {
+                $iphex = '0'.$iphex;
+            }
+            $ipstr .= $iphex;
+        }
+        return hexdec($ipstr);
+    }
 
+    /**
+     * 数字转换为IP
+     *
+     */
+    function ntoip($n)
+    {
+        $iphex = dechex($n);
+        $len = strlen($iphex);
+        if (strlen($iphex)<8)
+        {
+            $iphex = '0'.$iphex;
+            $len = strlen($iphex);
+        }
+        for ($i = 0, $j = 0; $j < $len; $i = $i + 1, $j = $j + 2)
+        {
+            $ippart = substr($iphex, $j, 2);
+            $fipart = substr($ippart, 0, 1);
+            if ($fipart == '0')
+            {
+                $ippart = substr($ippart, 1, 1);
+            }
+            $ip[] = hexdec($ippart);
+        }
+        $ip = array_reverse($ip);
 
-
+        return implode('.', $ip);
+    }
 }
+

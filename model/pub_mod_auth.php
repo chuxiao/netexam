@@ -19,8 +19,39 @@ class pub_mod_auth
     private static $cookie_online       = MYAPI_COOKIE_ONLINE; /* 在线 */
     private static $sign_key            = MYAPI_SIGN_KEY;
     private static $encrpy_key          = MYAPI_ENCRYPT_KEY;
-    private static $cookie_last_account = "OOFL"; /* 最后一次登录用的账号名称,显示在登录框中 */
+    private static $cookie_last_account = MYAPI_COOKIE_LAST_LOGIN; /* 最后一次登录用的账号名称,显示在登录框中 */
+    private static $cookie_captcha      = MYAPI_COOKIE_CAPTCHA;
+    private static $cookie_user_code    = MYAPI_COOKIE_ACCOUNT_CODE;
 
+
+    /**
+     * 检查用户名和验证码
+     *
+     */
+    public static function check_user_and_captcha($data)
+    {
+        // 验证码不能为空
+        if (empty($data['code']))
+        {
+            throw new Exception(serialize(array('code' => '验证码不能为空')));
+        }
+        $code = new mod_captcha;
+        $value  = $code->authcode($_COOKIE[self::$cookie_captcha], 'DECODE', $GLOBALS['config']['cookie_pwd']);
+        if (strtolower($data['code'])!=strtolower($value))
+        {
+            throw new Exception(serialize(array('code' => '验证码不正确或超时')));
+        }
+        if (empty($data['account']))
+        {
+            throw new Exception(serialize(array('account' => '请输入手机呈码')));
+        }
+        $result = pub_mod_user::get_one_userinfo($data['account']);
+        if (empty($result))
+        {
+            throw new Exception(serialize(array('account' => '帐号不存在')));
+        }
+        return true;
+    }
     /**
      * 用户登录验证，使用 Cookie 记录登录用户
      *
@@ -28,24 +59,18 @@ class pub_mod_auth
      * @param array $data
      * @return boolean
      */
-    public static function authenticate($data, $is_register = false)
+    public static function authenticate($data)
     {
-        if (!$is_register)
+        // 验证码不能为空
+        if (empty($data['code']))
         {
-            // 验证码不能为空
-            if (empty($data['code']))
-            {
-                throw new Exception(serialize(array('code' => '验证码不能为空')));
-            }
-            else
-            {
-                $code = new mod_captcha;
-                $value  = $code->authcode($_COOKIE['captcha'], 'DECODE', $GLOBALS['config']['cookie_pwd']);
-                if (strtolower($data['code'])!=strtolower($value))
-                {
-                    throw new Exception(serialize(array('code' => '验证码不正确或超时')));
-                }
-            }
+            throw new Exception(serialize(array('code' => '验证码不能为空')));
+        }
+        $code = new mod_captcha;
+        $value  = $code->authcode($_COOKIE[self::$cookie_captcha], 'DECODE', $GLOBALS['config']['cookie_pwd']);
+        if (strtolower($data['code'])!=strtolower($value))
+        {
+            throw new Exception(serialize(array('code' => '验证码不正确或超时')));
         }
         if (empty($data['account']))
         {
@@ -57,43 +82,17 @@ class pub_mod_auth
             throw new Exception(serialize(array('passwd' => '请输入密码')));
         }
 
-        // 第一步：查询IP是否已封禁
-        /*if (!pub_mod_login::v_ip($data['ip']))
-        {
-            T(10003);
-        }
-
-        // IP是否被后台禁用
-        if (pub_mod_user::exist_forbid_ip(ip2long($data['ip'])))
-        {
-            T(10105);
-        }*/
         $result = pub_mod_user::get_one_userinfo($data['account']);
         if (empty($result))
         {
             throw new Exception(serialize(array('account' => '帐号不存在')));
         }
 
-        // 第二步：帐号错误失败次数
-        /*if (!pub_mod_login::v_times_by_account($data['account']))
-        {
-            T(10001);
-        }
-
-        // 第二步：帐号IP失败次数
-        if (!pub_mod_login::v_times_by_ip($data['ip']))
-        {
-            T(10002);
-        }*/
-
         // 密码不正确
         $passwd = strlen($data['passwd']) == 40 ? $data['passwd'] : sha1($data['passwd']);
         if ($result['passwd'] !== $passwd)
         {
             throw new Exception(serialize(array('account' => '密码错误')));
-            /* 内网暂时不校验密码登录, 外网一定要注意这里 */
-            //pub_mod_login::add_times($data['account'], ip2long($data['ip']));
-            //T(10005);
         }
 
         /* 禁止登陆 */
@@ -101,32 +100,74 @@ class pub_mod_auth
         {
             throw new Exception(serialize(array('account' => '帐号被禁')));
         }
-        $result['login_ip']   = util::get_client_ip();
-        $result['last_login'] = $result['last_login'];
-        $result['app']        = !empty($data['app']) ? $data['app'] : "undefined";
-
-        // 登陆成功后，清除登录失败次数
+        pub_mod_user::update_user_login($data['account'], $data['ip'], $data['login_time']);
         self::$curr_user_id = $result['user_id'];
         self::$curr_user = $result;
-        self::$curr_user['last_account'] = $data['account'];
-        self::$curr_user['mobile'] = $result['mobile'];
-        self::$curr_user['ip'] = $result['login_ip'];
         self::$curr_user['user_id'] = $result['user_id'];
-        self::$curr_user['user_name'] = $result['user_name'];
-        self::$curr_user['email'] = $result['email'];
-        self::$curr_user['email_verify'] = isset($result['email_verify']) ? $result['email_verify'] : 0;
         self::$curr_user['gender'] = isset($result['gender']) ? $result['gender'] : 1;
         self::$curr_user['face'] = !empty($result['face']) ? "/static/uploads/small/".$result['face']."_small.jpg" : "/static/images/tx50.png";
-        /*
-        // 记录登陆队列
-        $params_login = array();
-        $params_login["user_id"] = $result['user_id'];
-        $params_login["time"]    = time();
-        $params_login["ip"]      = $data['ip'];
-        $params_login["from"]    = $data['app'];
-        pub_mod_login::add_loginlog($params_login);
-         */
 
+        // 登陆时间，默认为0，即浏览器关闭cookie失效，选择记住密码则不为0，MYAPI_COOKIE_EXPIRE这个时间段内不失效
+        $cookie_expire = !empty($data['time']) ? time() + MYAPI_COOKIE_EXPIRE : 0;
+        // 设置Cookie
+        self::set_logined_cookie(self::$curr_user, $cookie_expire, false);
+        return true;
+    }
+
+    /**
+     * 用户手机验证码登录验证，使用 Cookie 记录登录用户
+     *
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public static function authenticate2($data)
+    {
+        // 验证码不能为空
+        if (empty($data['code']))
+        {
+            throw new Exception(serialize(array('code' => '验证码不能为空')));
+        }
+        if (!isset($_COOKIE[self::$cookie_user_code]))
+        {
+            throw new Exception(serialize(array('code' => '手机验证码失效')));
+        }
+        $cookie_decode = self::_decrypt($_COOKIE[self::$cookie_user_code], self::$encrpy_key);
+        $cookie_data   = explode(":", $cookie_decode);
+        $md5_str       = array_pop($cookie_data);
+        // 验证签名
+        if (md5(implode(":", $cookie_data) . self::$sign_key) != $md5_str)
+        {
+            throw new Exception(serialize(array('code' => '手机验证码验证失败')));
+        }
+        if (time() - $cookie_data['timestamp'] > MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE)
+        {
+            throw new Exception(serialize(array('code' => '手机验证码超时，请重新获取')));
+        }
+        $code = new mod_captcha;
+        $value  = $code->authcode($cookie_data['acaptcha'], 'DECODE', $GLOBALS['config']['cookie_pwd']);
+        if (strtolower($data['code'])!=strtolower($value))
+        {
+            throw new Exception(serialize(array('code' => '手机验证码不正确')));
+        }
+
+        $result = pub_mod_user::get_one_userinfo($cookie_data['account']);
+        if (empty($result))
+        {
+            throw new Exception(serialize(array('account' => '帐号不存在')));
+        }
+
+        /* 禁止登陆 */
+        if ($result['is_login'] < 1)
+        {
+            throw new Exception(serialize(array('account' => '帐号被禁')));
+        }
+        pub_mod_user::update_user_login($result['user_id'], $data['ip'], $data['login_time']);
+        self::$curr_user_id = $result['user_id'];
+        self::$curr_user = $result;
+        self::$curr_user['user_id'] = $result['user_id'];
+        self::$curr_user['gender'] = isset($result['gender']) ? $result['gender'] : 1;
+        self::$curr_user['face'] = !empty($result['face']) ? "/static/uploads/small/".$result['face']."_small.jpg" : "/static/images/tx50.png";
 
         // 登陆时间，默认为0，即浏览器关闭cookie失效，选择记住密码则不为0，MYAPI_COOKIE_EXPIRE这个时间段内不失效
         $cookie_expire = !empty($data['time']) ? time() + MYAPI_COOKIE_EXPIRE : 0;
@@ -150,7 +191,7 @@ class pub_mod_auth
             return false;
         }
         self::p3pheader();
-        $cookie_data = array($params['user_id'], rawurlencode($params['user_name']), $params['email'], time(),$params['face'],$params['gender']);
+        $cookie_data = array($params['user_id'], rawurlencode($params['user_name']), $params['last_login'], $params['face'], $params['gender']);
         $cookie_expire = $cookie_expire == 0 ? 0 : time() + MYAPI_COOKIE_EXPIRE;
         $value         = implode(':', $cookie_data);
         /* 签名 */
@@ -161,7 +202,6 @@ class pub_mod_auth
         {
             return $value;
         }
-
         $last_account = $params['email'];
         if ($params['mobile'])
         {
@@ -326,6 +366,54 @@ class pub_mod_auth
         setcookie(self::$cookie_auth, '', time() - 86400, '/', self::$cookie_domain);
         setcookie(self::$cookie_online, '', time() - 86400, '/', self::$cookie_domain);
         return true;
+    }
+
+    /**
+     * 生成图片验证码随机字母
+     *
+     */
+    public static function make_verify_code()
+    {
+        $code = new mod_captcha;
+        $code->code = $code->make_seccode(4);                           // 验证码
+        setcookie(self::$cookie_captcha, $code->authcode($code->code, 'ENCODE', $GLOBALS['config']['cookie_pwd']), 0);
+        $code->type = 0;                                               // 0英文图片验证码 1中文图片验证码 2Flash 验证码 3语音验证码 4位图验证码
+        $code->width = 100;                                            // 验证码宽度
+        $code->height = 30;                                            // 验证码高度
+        $code->background = 1;                                         // 是否随机图片背景
+        $code->adulterate = 1;                                         // 是否随机背景图形
+        $code->ttf = 0;                                                // 是否随机使用ttf字体
+        $code->angle = 0;                                              // 是否随机倾斜度
+        $code->warping = 0;                                            // 是否随机扭曲
+        $code->scatter = 0;                                            // 是否图片打散
+        $code->color = 1;                                              // 是否随机颜色
+        $code->size = 0;                                               // 是否随机大小
+        $code->shadow = 1;                                             // 是否文字阴影
+        $code->animator = 0;                                           // 是否GIF 动画
+        $code->fontpath = './static/captcha/image/seccode/font/';      // 字体路径
+        $code->datapath = './static/captcha/image/seccode/';           // 数据路径
+        $code->display();
+    }
+
+    /**
+     * 生成手机验证码
+     *
+     */
+    public static function make_account_code($account)
+    {
+        $code = new mod_captcha;
+        $auth_code = $code->make_seccode(6);
+        $cookie_data = array('user_id' => $account, 'timestamp' => time(), 'acaptcha' => $code->authcode($auth_code, 'ENCODE', $GLOBALS['config']['cookie_pwd']), 0);
+        $cookie_expire = $cookie_expire == 0 ? 0 : time() + MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE;
+        $value         = implode(':', $cookie_data);
+        /* 签名 */
+        $value .=":" . md5($value . self::$sign_key);
+        /* 加密 */
+        $value         = self::_encrpy($value, self::$encrpy_key);
+
+        // 记录最后一次登录成功的账号
+        setcookie(self::$cookie_user_code, $value, $cookie_expire, '/', self::$cookie_domain);
+        return $auth_code;
     }
 
     /**

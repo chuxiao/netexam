@@ -474,18 +474,15 @@ class mod_captcha {
         return $hash;
     }
 
-    function make_seccode(){
+    function make_seccode($length)
+    {
         $seccode = $this->random(6, 1);//6位的随机数字
-        $s = sprintf('%04s', base_convert($seccode, 10, 24));
+        $s = sprintf("%0{$length}s", base_convert($seccode, 10, 24));
         $seccodeunits = 'BCEFGHJKMPQRTVWXY2346789';
         $seccode = '';
-        for($i = 0; $i < 4; $i++) {
+        for($i = 0; $i < $length; $i++) {
             $unit = ord($s{$i});
             $seccode .= ($unit >= 0x30 && $unit <= 0x39) ? $seccodeunits[$unit - 0x30] : $seccodeunits[$unit - 0x57];
-        }
-        setcookie('captcha',$this->authcode($seccode, 'ENCODE', $GLOBALS['config']['cookie_pwd']),0);
-        if(!isset($_COOKIE['captcha'])){
-            setcookie('captcha',$this->authcode($seccode, 'ENCODE', $GLOBALS['config']['cookie_pwd']),0);
         }
         return $seccode;
     }
@@ -497,9 +494,9 @@ class mod_captcha {
      * 使用举例：authcode('123', 'ENCODE', 'jordan', 0);  即用'jordan'这个字符串加密'123'这个字符串
      *
      * */
-    function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+    function authcode($string, $operation = 'DECODE', $key, $expiry = 0) {
         $ckey_length = 4;
-        $key = md5($key != '' ? $key : getglobal('authkey'));
+        $key = md5($key);
         $keya = md5(substr($key, 0, 16));
         $keyb = md5(substr($key, 16, 16));
         $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';

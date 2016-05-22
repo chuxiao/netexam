@@ -481,22 +481,9 @@ class db
     {
         $sql = "UPDATE `{$table_name}` SET ";
 
-        if (isset($key_values['is_admin']))
-        {
-            /* 通过后台管理操作会对该值有影响 */
-            unset($key_values['is_admin']);
-        }
-
         foreach ($key_values as $k => $v)
         {
-            if (in_array($k, array("user_utime")))
-            {
-                $sql .= "`{$k}` = {$v},";
-            }
-            else
-            {
-                $sql .= "`{$k}` = '{$v}',";
-            }
+            $sql .= "`{$k}` = '{$v}',";
         }
         if ($where)
         {
@@ -504,7 +491,7 @@ class db
             {
                 $where_sql = implode(' AND ', $where);
             }
-            else 
+            else
             {
                 $where_sql = "and {$where}";
             }

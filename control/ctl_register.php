@@ -20,28 +20,38 @@ class ctl_register
 
     public function register()
     {
-        // TODO:
+        $form = req::item("form", '');
+        try
+        {
+            pub_mod_register::verify($form);
+            pub_mod_register::create_account($form);
+            cls_msgbox::show('注册成功', '正在为您跳转......', '/?ct=login');
+        }
+        catch (Exception $e)
+        {
+            if ($arr_error = @unserialize($e->getMessage()))
+            {
+                foreach ($arr_error as $key=>$value)
+                {
+                    $title = $key;
+                    $content = $value;
+                }
+                cls_msgbox::show($title, $value, -1);
+                exit;
+
+                tpl::assign('error', $arr_error);
+                tpl::assign('v', $form);
+            }
+            else
+            {
+                cls_msgbox::show('出错了', $e->getCode());
+                exit;
+            }
+        }
     }
 
     public function verifycode()
     {
-        $code = new mod_captcha;
-        $code->code = $code->make_seccode();                           // 验证码
-        $code->type = 0;                                               // 0英文图片验证码 1中文图片验证码 2Flash 验证码 3语音验证码 4位图验证码
-        $code->width = 100;                                            // 验证码宽度
-        $code->height = 30;                                            // 验证码高度
-        $code->background = 1;                                         // 是否随机图片背景
-        $code->adulterate = 1;                                         // 是否随机背景图形
-        $code->ttf = 0;                                                // 是否随机使用ttf字体
-        $code->angle = 0;                                              // 是否随机倾斜度
-        $code->warping = 0;                                            // 是否随机扭曲
-        $code->scatter = 0;                                            // 是否图片打散
-        $code->color = 1;                                              // 是否随机颜色
-        $code->size = 0;                                               // 是否随机大小
-        $code->shadow = 1;                                             // 是否文字阴影
-        $code->animator = 0;                                           // 是否GIF 动画
-        $code->fontpath = './static/captcha/image/seccode/font/';      // 字体路径
-        $code->datapath = './static/captcha/image/seccode/';           // 数据路径
-        $code->display();
+        pub_mod_auth::make_verify_code();
     }
 }
