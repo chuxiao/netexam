@@ -70,7 +70,7 @@ $GLOBALS['config']['db'] = array(
         'port'    => 3306,
         'user'    => 'root',
         'pass'    => '111111',
-        'name'    => 'webgame3',
+        'name'    => 'netexam',
         'charset' => 'utf-8',
     ),
     'slave'  => array(
@@ -79,7 +79,7 @@ $GLOBALS['config']['db'] = array(
             'port'    => 3306,
             'user'    => 'root',
             'pass'    => '111111',
-            'name'    => 'webgame3',
+            'name'    => 'netexam',
             'charset' => 'utf-8',
         ),
     /**

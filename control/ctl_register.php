@@ -15,12 +15,21 @@ class ctl_register
 
     public function index()
     {
+        tpl::assign("time", time());
         tpl::display("register.tpl");
     }
 
     public function register()
     {
-        $form = req::item("form", '');
+        $form = array();
+        $form['account'] = req::item("account", '');
+        $form['passwd'] = req::item("passwd", '');
+        $form['re_passwd'] = req::item("passwd2", '');
+        $form['nickname'] = req::item("nickname", '');
+        $form['gender'] = req::item("gender", '');
+        $form['birthday'] = req::item("birthday", '');
+        $form['code'] = req::item("verify_code", '');
+        $form['auth_code'] = req::item("auth_code", '');
         try
         {
             pub_mod_register::verify($form);

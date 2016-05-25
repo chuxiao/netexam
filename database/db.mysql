@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `user_00`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_00` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS `user_01`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_01` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -61,7 +61,7 @@ DROP TABLE IF EXISTS `user_02`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_02` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS `user_03`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_03` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -99,7 +99,7 @@ DROP TABLE IF EXISTS `user_04`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_04` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -118,7 +118,7 @@ DROP TABLE IF EXISTS `user_05`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_05` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -137,7 +137,7 @@ DROP TABLE IF EXISTS `user_06`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_06` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -156,7 +156,7 @@ DROP TABLE IF EXISTS `user_07`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_07` (
-  `user_id` int(11) NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID 唯一,手机号码',
   `passwd` varchar(40) NOT NULL COMMENT '用户密码  sha1加密',
   `passwd_level` tinyint(2) NOT NULL DEFAULT '0' COMMENT '密码强度 0未评级 1低 2中 3强',
   `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -175,7 +175,7 @@ DROP TABLE IF EXISTS `user_details_00`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_00` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -202,7 +202,7 @@ DROP TABLE IF EXISTS `user_details_01`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_01` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -229,7 +229,7 @@ DROP TABLE IF EXISTS `user_details_02`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_02` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -256,7 +256,7 @@ DROP TABLE IF EXISTS `user_details_03`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_03` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -283,7 +283,7 @@ DROP TABLE IF EXISTS `user_details_04`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_04` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -310,7 +310,7 @@ DROP TABLE IF EXISTS `user_details_05`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_05` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -337,7 +337,7 @@ DROP TABLE IF EXISTS `user_details_06`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_06` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',
@@ -364,7 +364,7 @@ DROP TABLE IF EXISTS `user_details_07`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_details_07` (
-  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户ID 唯一,手机号码',
   `reg_ip` int(10) NOT NULL DEFAULT '0' COMMENT '注册IP',
   `reg_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `pet_name` varchar(30) NOT NULL DEFAULT '' COMMENT '昵称',

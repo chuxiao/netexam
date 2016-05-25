@@ -80,8 +80,10 @@ class pub_mod_register
         }
 
         // 初始化用户基本数据
+        $user_id = $data['account'];
         $data_user         = array();
         $data_user['user_id']   = $data['account'];
+        $data_user['type'] = 1;
         // 移动端直接传递sha1加密值过来
         $data_user['passwd']    = strlen($data['passwd']) == 40 ? $data['passwd'] : sha1($data['passwd']);
         $data_user['is_login'] = 1;
@@ -94,8 +96,8 @@ class pub_mod_register
             $data_details['user_id']      = $data['account'];
             $data_details['reg_ip']       = ip2long(util::get_client_ip());   // 注册IP
             $data_details['reg_time']     = time();                                // 注册时间
-            $data_details['name']         = $data['name'];             // 真实姓名
-            $data_details['points']       = $GLOBALS['register']['free_points'];  //注册送积分
+            $data_details['name']         = $data['nickname'];             // 真实姓名
+            $data_details['points']       = 0;
 
             $handle = pub_mod_user::insert_user_details($user_id, $data_details);
             if (!$handle)

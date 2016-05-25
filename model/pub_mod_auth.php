@@ -376,7 +376,8 @@ class pub_mod_auth
     {
         $code = new mod_captcha;
         $code->code = $code->make_seccode(4);                           // 验证码
-        setcookie(self::$cookie_captcha, $code->authcode($code->code, 'ENCODE', $GLOBALS['config']['cookie_pwd']), 0);
+        $cookie = $code->authcode($code->code, 'ENCODE', $GLOBALS['config']['cookie_pwd']);
+        setcookie(self::$cookie_captcha, $cookie, 0);
         $code->type = 0;                                               // 0英文图片验证码 1中文图片验证码 2Flash 验证码 3语音验证码 4位图验证码
         $code->width = 100;                                            // 验证码宽度
         $code->height = 30;                                            // 验证码高度

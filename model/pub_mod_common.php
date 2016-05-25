@@ -44,14 +44,6 @@ class pub_mod_common
     {
         switch ($table)
         {
-            case 'user_login':
-                //$item_value 为 邮箱帐号
-                $item_value = sha1(strtolower($item_value));
-                //128张表改为8张表
-                //$item_value = str_pad(base_convert(substr($item_value, -2), 16, 10) % 128, 3, "0", STR_PAD_LEFT);
-                $item_value = str_pad(base_convert(substr($item_value, -2), 16, 10) % 8, 2, "0", STR_PAD_LEFT);
-                return 'user_login_' . $item_value;
-                break;
             case 'user_details':
                 //100张表改为8张表
                 //$item_value = str_pad(substr($item_value, -2), 2, "0", STR_PAD_LEFT);

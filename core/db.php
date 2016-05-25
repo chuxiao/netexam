@@ -15,41 +15,41 @@ if( !defined('CORE') ) exit('Request Error!');
  */
 class db
 {
-    
+
     //连接默认是 $links[ self::$link_name ]['w'] ||  $links[ self::$link_name ]['r']
     //如果用户要开一个新的连接, 用 set_connect($link_name, db配置) ， 当前链接sql操作完后，使用 set_connect_default 还原为默认
     //config 格式与 $GLOBALS['config']['db'] 一致
     private static $links = array();
-    
+
     //数据库配置数组
     private static $configs = array();
-    
+
     //当前连接名，系统通过 $links[ self::$link_name ]['w'] ||  $links[ self::$link_name ]['r'] 识别特定配置的链接
     private static $link_name = 'default';
-    
+
     //当前使用的链接， 如果不用 set_connect 或 set_connect_default 进行改变， 这连接由系统决定
     private static $cur_link = null;
-    
+
     private static $query_count = 0;
     private static $log_slow_query = true;
     private static $log_slow_time = 0.05;
-    
+
     //游标集
     private static $cur_result = null;
     private static $results = array();
-    
+
     //是否对SQL语句进行安全检查并处理
     public static $safe_test = true;
     public static $rps = array('/*', '--', '#', 'union', 'sleep', 'benchmark', 'load_file', 'outfile');
     public static $rpt = array('/×', '——', '＃', 'ｕｎｉｏｎ', 'ｓｌｅｅｐ', 'ｂｅｎｃｈｍａｒｋ', 'ｌｏａｄ_ｆｉｌｅ', 'ｏｕｔｆｉｌｅ');
-    
-   /**
-    * 改变链接为指定配置的链接(如果不同时使用多个数据库，不会涉及这个操作)
-    * @parem  $link_name 链接标识名
-    * @parem  $config 多次使用时， 这个数组只需传递一次
-    *         config 格式与 $GLOBALS['config']['db'] 一致
-    * @return void
-    */
+
+    /**
+     * 改变链接为指定配置的链接(如果不同时使用多个数据库，不会涉及这个操作)
+     * @parem  $link_name 链接标识名
+     * @parem  $config 多次使用时， 这个数组只需传递一次
+     *         config 格式与 $GLOBALS['config']['db'] 一致
+     * @return void
+     */
     public static function set_connect($link_name, $config = array() )
     {
         self::$link_name = $link_name;
@@ -61,12 +61,12 @@ class db
             }
         }
     }
-    
-   /**
-    * 还原为默认连接(如果不同时使用多个数据库，不会涉及这个操作)
-    * @parem $config 指定配置（默认使用inc_config.php的配置）
-    * @return void
-    */
+
+    /**
+     * 还原为默认连接(如果不同时使用多个数据库，不会涉及这个操作)
+     * @parem $config 指定配置（默认使用inc_config.php的配置）
+     * @return void
+     */
     public static function set_connect_default( $config = '' )
     {
         if( empty($config) ) {
@@ -74,10 +74,10 @@ class db
         }
         self::set_connect('default', $config );
     }
-    
-   /**
-    * 获取默认配置
-    */
+
+    /**
+     * 获取默认配置
+     */
     private static function _get_default_config()
     {
         if( empty(self::$configs['default']) )
@@ -89,7 +89,7 @@ class db
         }
         return self::$configs['default'];
     }
-    
+
     /**
      * (读+写)连接数据库+选择数据库
      * @parem $is_master 是否为主库
@@ -103,8 +103,8 @@ class db
         if( $is_master === true )
         {
             $link = 'r';
-            $key = array_rand($db_config['host']['slave']);
-            $db_profile = $db_config['host']['slave'][$key];
+            $key = array_rand($db_config['slave']);
+            $db_profile = $db_config['slave'][$key];
         }
         else
         {
@@ -136,7 +136,7 @@ class db
         self::$cur_link = self::$links[self::$link_name][$link];
         return self::$links[self::$link_name][$link];
     }
-    
+
     /**
      * 返回查询游标
      * @return rsid
@@ -146,7 +146,7 @@ class db
         //return $rsid=='' ? self::$cur_result : self::$results[(int)$rsid];
         return self::$cur_result;
     }
-    
+
     /**
      * 执行一条语句(读 + 写)
      *
@@ -155,15 +155,14 @@ class db
      */
     public static function query ($sql, $is_master = false)
     {
-        //file_put_contents(PATH_DATA . '/log/sql.txt', $sql . "\n", FILE_APPEND);
         $start_time = microtime(true);
         $sql = trim($sql);
-        
+
         //对SQL语句进行安全过滤
         if( self::$safe_test==true ) {
             $sql = self::_filter_sql($sql);
         }
-        
+
         //获取当前连接
         if( $is_master===true )
         {
@@ -178,9 +177,10 @@ class db
                 self::$cur_link = self::_init_mysql( true );
             }
         }
-        
+
         try
         {
+            file_put_contents('/tmp/sql.txt', $sql . "\n", FILE_APPEND);
             self::$cur_result = self::$cur_link->query($sql);
             //记录慢查询
             if( self::$log_slow_query )
@@ -207,7 +207,7 @@ class db
             handler_fatal_error( 'db.php query()', $e->getMessage().'|'.$sql.' page:'.util::get_cururl() );
         }
     }
-    
+
     /**
      * (写)，执行一个出错也不中断的语句（通常是涉及唯一主键的操作）
      * @param  string $sql
@@ -223,17 +223,17 @@ class db
         $rs = @self::$cur_link->query($sql);
         return $rs;
     }
-    
-   /**
-    * 取得最后一次插入记录的ID值
-    *
-    * @return int
-    */
+
+    /**
+     * 取得最后一次插入记录的ID值
+     *
+     * @return int
+     */
     public static function insert_id ()
     {
         return self::$cur_link->insert_id;
     }
-    
+
     /**
      * 返回受影响数目
      * @return init
@@ -242,7 +242,7 @@ class db
     {
         return self::$cur_link->affected_rows;
     }
-    
+
     /**
      * 返回本次查询所得的总记录数...
      *
@@ -253,7 +253,7 @@ class db
         $rsid = self::_get_rsid( $rsid );
         return $rsid->num_rows;
     }
-    
+
     /**
      * (读)返回单条记录数据
      *
@@ -267,7 +267,7 @@ class db
         $row = $rsid->fetch_assoc();
         return $row;
     }
-    
+
     /**
      * (读)直接返回单条记录数据
      *
@@ -283,15 +283,15 @@ class db
         $cur_rsid = self::$cur_result;
         $rsid = self::query($sql, false);
         $row = $rsid->fetch_assoc();
-        
+
         //使cur的查询游标还原为get_one前
         if( !empty($cur_rsid) ) {
             self::$cur_result = $cur_rsid;
         }
-        
+
         return $row;
     }
-    
+
     /**
      * (读)返回多条记录数据
      *
@@ -309,11 +309,11 @@ class db
         }
         return empty($rows) ? false : $rows;
     }
-    
-   /**
-    * SQL语句过滤程序（检查到有不安全的语句仅作替换和记录攻击日志而不中断）
-    * @parem string $sql 要过滤的SQL语句 
-    */
+
+    /**
+     * SQL语句过滤程序（检查到有不安全的语句仅作替换和记录攻击日志而不中断）
+     * @parem string $sql 要过滤的SQL语句 
+     */
     private static function _filter_sql($sql)
     {
         $clean = $error='';
@@ -388,12 +388,12 @@ class db
         if ( $fail===true )
         {
             $sql = str_ireplace(self::$rps, self::$rpt, $sql);
-            
+
             //进行日志
             //$gurl = htmlspecialchars( util::get_cururl() );
             //$msg  = "Time: {$qtime} -- ".date('y-m-d H:i', time())." -- {$gurl}<br>\n".htmlspecialchars( $sql )."<hr size='1' />\n";
             //log::add('filter_sql', $msg);
-            
+
             return $sql;
         }
         else
@@ -401,18 +401,18 @@ class db
             return $sql;
         }
     }
-    
-   /**
-    * 修正被防注入程序修改了的字符串
-    * 在读出取时有必要完全还原才使用此方法
-    * @param string $fvalue
-    */
+
+    /**
+     * 修正被防注入程序修改了的字符串
+     * 在读出取时有必要完全还原才使用此方法
+     * @param string $fvalue
+     */
     public static function revert($fvalue)
     {
         $fvalue = str_ireplace(self::$rpt, self::$rps, $fvalue);
         return $fvalue;
     }
-    
+
     /**
      * 记录慢查询日志
      *
@@ -426,7 +426,7 @@ class db
         $msg  = "Time: {$qtime} -- ".date('y-m-d H:i', time())." -- {$gurl}<br>\n".htmlspecialchars( $sql )."<hr size='1' />\n";
         log::add('slow_query', $msg);
     }
-    
+
     /**
      * 设置是否自动提交事务
      * 只针对InnoDB类型表
@@ -453,7 +453,7 @@ class db
     {
         return @self::$cur_link->query('COMMIT');
     }
-    
+
     /**
      * 回滚事务
      * 在执行self::autocommit||begin_tran后执行后执行
@@ -520,7 +520,7 @@ class db
         }
         $sql = "INSERT INTO {$table_name} (" . substr($items_sql, 0, -1) . ") VALUES (" . substr($values_sql, 0, -1) . ")";
         return self::query($sql);
-     }
+    }
 
     /**
      * 取得一个表的初始数组,包括所有表字段及默认值，无默认值为''

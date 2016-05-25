@@ -22,6 +22,7 @@ define('CORE', dirname(__FILE__));
 
 //系统配置
 require CORE.'/../config/inc_config.php';
+require CORE.'/../config/inc_user_api.php';
 //外部请求程序处理(路由)
 require CORE.'/req.php';
 req::init();
