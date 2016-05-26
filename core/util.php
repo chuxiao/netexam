@@ -763,52 +763,5 @@ class util
         }
         return $key;
     }
-
-    /**
-     * IP转换为数字
-     *
-     */
-    function ipton($ip)
-    {
-        $ip_arr = explode('.', $ip);
-        foreach ($ip_arr as $value)
-        {
-            $iphex = dechex($value);
-            if (strlen($iphex) < 2)
-            {
-                $iphex = '0'.$iphex;
-            }
-            $ipstr .= $iphex;
-        }
-        return hexdec($ipstr);
-    }
-
-    /**
-     * 数字转换为IP
-     *
-     */
-    function ntoip($n)
-    {
-        $iphex = dechex($n);
-        $len = strlen($iphex);
-        if (strlen($iphex)<8)
-        {
-            $iphex = '0'.$iphex;
-            $len = strlen($iphex);
-        }
-        for ($i = 0, $j = 0; $j < $len; $i = $i + 1, $j = $j + 2)
-        {
-            $ippart = substr($iphex, $j, 2);
-            $fipart = substr($ippart, 0, 1);
-            if ($fipart == '0')
-            {
-                $ippart = substr($ippart, 1, 1);
-            }
-            $ip[] = hexdec($ippart);
-        }
-        $ip = array_reverse($ip);
-
-        return implode('.', $ip);
-    }
 }
 

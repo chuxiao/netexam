@@ -34,7 +34,7 @@ class ctl_login
             pub_mod_auth::authenticate($form);
             // P3P
             pub_mod_auth::p3pheader();
-            cls_msgbox::show('登录成功', '正在为您跳转......', '/?ac=center');
+            cls_msgbox::show('登录成功', '正在为您跳转......', '/?ct=center');
         }
         catch (Exception $e)
         {

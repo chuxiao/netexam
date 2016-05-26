@@ -162,6 +162,6 @@ class pub_mod_user
      */
     public static function update_user_login($account, $ip, $time)
     {
-        self::update_user($account, array('last_ip' => util::ipton($ip), 'last_login' => $time));
+        self::update_user($account, array('last_ip' => ip2long($ip), 'last_login' => $time));
     }
 }

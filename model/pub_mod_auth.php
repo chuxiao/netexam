@@ -163,6 +163,7 @@ class pub_mod_auth
             throw new Exception(serialize(array('account' => '帐号被禁')));
         }
         pub_mod_user::update_user_login($result['user_id'], $data['ip'], $data['login_time']);
+        file_put_contents("/tmp/log.txt", var_export($result, true), FILE_APPEND);
         self::$curr_user_id = $result['user_id'];
         self::$curr_user = $result;
         self::$curr_user['user_id'] = $result['user_id'];
@@ -191,7 +192,7 @@ class pub_mod_auth
             return false;
         }
         self::p3pheader();
-        $cookie_data = array($params['user_id'], rawurlencode($params['user_name']), $params['last_login'], $params['face'], $params['gender']);
+        $cookie_data = array($params['user_id'], rawurlencode($params['nickname']), $params['gender'], $params['face'], $params['points']);
         $cookie_expire = $cookie_expire == 0 ? 0 : time() + MYAPI_COOKIE_EXPIRE;
         $value         = implode(':', $cookie_data);
         /* 签名 */
@@ -202,14 +203,6 @@ class pub_mod_auth
         {
             return $value;
         }
-        $last_account = $params['email'];
-        if ($params['mobile'])
-        {
-            $last_account = $params['mobile'];
-        }
-
-        // 记录最后一次登录成功的账号
-        setcookie(self::$cookie_last_account, $last_account, time() + MYAPI_COOKIE_EXPIRE, '/', self::$cookie_domain);
         // 设置Cookie
         setcookie(self::$cookie_auth, $value, $cookie_expire, '/', self::$cookie_domain);
 
@@ -299,11 +292,10 @@ class pub_mod_auth
         else
         {
             self::$curr_user = array("user_id" => $cookie_data[0],
-                "user_name" => rawurldecode($cookie_data[1]),
-                "email" => $cookie_data[2],
-                "last_login" => $cookie_data[3],
-                "face" => $cookie_data[4],
-                "gender" => $cookie_data[5]);
+                "nickname" => rawurldecode($cookie_data[1]),
+                "gender" => $cookie_data[2],
+                "face" => $cookie_data[3],
+                "points" => $cookie_data[4]);
             self::$curr_user_id = $cookie_data[0];
             self::$is_login = true;
             return self::$curr_user;
