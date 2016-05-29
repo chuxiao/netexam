@@ -168,6 +168,25 @@ CREATE TABLE `user_07` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `user_admin`
+--
+
+DROP TABLE IF EXISTS `user_admin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_admin` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID 唯一',
+  `user_name` varchar(20) NOT NULL COMMENT '用户名 唯一',
+  `passwd` varchar(40) NOT NULL COMMENT '用户密码  md5加密',
+  `last_login` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
+  `last_ip` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登陆IP',
+  `is_login` enum('0','1') NOT NULL DEFAULT '1' COMMENT '是否允许用户登陆 默认值1 允许',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_name` (`user_name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理账号表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user_details_00`
 --
 
@@ -392,4 +411,4 @@ CREATE TABLE `user_details_07` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-21 16:57:42
+-- Dump completed on 2016-05-29 17:08:24
