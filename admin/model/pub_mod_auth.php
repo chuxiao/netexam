@@ -10,19 +10,7 @@ if( !defined('CORE') ) exit('Request Error!');
 class pub_mod_auth
 {
     public static $is_login             = null; /* 是否登录 */
-    public static $curr_user            = array();
     public static $curr_user_id         = null;
-    public static $is_p3p_header        = false;
-    private static $cookie_domain       = MYAPI_COOKIE_DOMAIN; /* AUTH COOKIE 域名 */
-    private static $cookie_auth         = MYAPI_COOKIE; /* 登录成功的COOKIE，保存user_id, user_name, email */
-    private static $cookie_session      = MYAPI_COOKIE_SESSION; /* 登录后的校验 */
-    private static $cookie_online       = MYAPI_COOKIE_ONLINE; /* 在线 */
-    private static $sign_key            = MYAPI_SIGN_KEY;
-    private static $encrpy_key          = MYAPI_ENCRYPT_KEY;
-    private static $cookie_last_account = MYAPI_COOKIE_LAST_LOGIN; /* 最后一次登录用的账号名称,显示在登录框中 */
-    private static $cookie_captcha      = MYAPI_COOKIE_CAPTCHA;
-    private static $cookie_user_code    = MYAPI_COOKIE_ACCOUNT_CODE;
-
 
     /**
      * 检查用户名和验证码
@@ -97,6 +85,8 @@ class pub_mod_auth
             throw new Exception(serialize(array('account' => '帐号被禁')));
         }
         pub_mod_user::update_user_login($data['account'], $data['ip'], $data['login_time']);
+        $_SESSION['account'] = $data['account'];
+        $_SESSION['user_id'] = $result['user_id'];
         return true;
     }
 
@@ -116,33 +106,14 @@ class pub_mod_auth
     }
 
     /**
-     * 获取当前用户UID
-     *
-     * @return int
-     */
-    public static function get_user_id()
-    {
-        if (!is_null(self::$curr_user_id))
-        {
-            return self::$curr_user_id;
-        }
-        self::get_current_userinfo();
-        return self::$curr_user_id;
-    }
-
-    /**
      * 获取当前登录的用户信息（COOKIE）
      *
      * @return int
      */
     public static function get_current_user_id()
     {
-        if (!is_null(self::$curr_user_id))
-        {
-            return self::$curr_user_id;
-        }
-        self::get_current_userinfo();
-        return self::$curr_user_id;
+        session_start();
+        return $_SESSION['user_id'];
     }
 
     /**
@@ -151,30 +122,14 @@ class pub_mod_auth
      */
     public static function get_current_userinfo()
     {
-        if (!isset($_COOKIE[self::$cookie_auth]))
+        session_start();
+        if (isset($_SESSION['user_id']))
         {
-            return false;
-        }
-        // 解密
-        $cookie_decode = self::_decrypt($_COOKIE[self::$cookie_auth], self::$encrpy_key);
-        $cookie_data   = explode(":", $cookie_decode);
-        $md5_str       = array_pop($cookie_data);
-        // 验证签名
-        if (md5(implode(":", $cookie_data) . self::$sign_key) != $md5_str)
-        {
-            self::logout_cookie();
-            return false;
+            self::$is_login = true;
         }
         else
         {
-            self::$curr_user = array("user_id" => $cookie_data[0],
-                "nickname" => rawurldecode($cookie_data[1]),
-                "gender" => $cookie_data[2],
-                "face" => $cookie_data[3],
-                "points" => $cookie_data[4]);
-            self::$curr_user_id = $cookie_data[0];
-            self::$is_login = true;
-            return self::$curr_user;
+            self::$is_login = false;
         }
     }
 

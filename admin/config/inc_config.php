@@ -24,10 +24,6 @@ define('PATH_TEST_HTML', PATH_ROOT . '/test');  //静态文件生成 测试目�
 define('SITE_URL', 'http://www.471wan.com/html');  //站点URL
 define('HTML_URL', 'http://www.471wan.com/html');  //静态预览URL
 define('HTML_TEST_URL', 'http://www.471wan.com/test');   //测试目录访问URL
-//define('MYAPI_COOKIE_DOMAIN', '.www.471wan.com');
-
-//正式环境中如果要考虑二级域名问题的应该用 .xxx.com
-define('COOKIE_DOMAIN', '');
 
 //主应用URL
 define('URL', 'http://www.471wan.com');
@@ -37,7 +33,6 @@ define('SESSION_TYPE', 'file');
 //------------------------------------------------------------------------------------------
 //配置变量，或系统定义的全局性变量，建议都用 config 开头，在路由器中默认拦截这种变量名
 //------------------------------------------------------------------------------------------
-$GLOBALS['domain_key']='842df3d27cdded1a3bef7606e0ce5efc';
 //调试选项（指定某些IP允许开启调试，数组格式为 array('ip1', 'ip2'...)
 $GLOBALS['config']['safe_client_ip'] = array('127.0.0.1', '192.168.1.145','119.251.6.182','211.103.230.2140');
 //网站日志配置
@@ -49,15 +44,14 @@ $GLOBALS['config']['log'] = array(
 //cache配置(df_prifix建议按网站名分开,如mc_114la_ / mc_tuan_ 等)
 //cache_type一般是memcache，如无可用则用file，如有条件，用memcached
 $GLOBALS['config']['cache'] = array(
-    'enable'  => false,
-    'cache_type' => 'memcache',
-    'cache_time' => 7200,
-    'file_cachename' => PATH_CACHE.'/cfc_data',
-    'df_prefix' => 'mc_df_',
-    'memcache' => array(
-        'time_out' => 1,
-        'host' => array( 'memcache://127.0.0.1:11211' )//这个不改好无法充值
-        //'host' => array( 'memcache://192.168.5.211:11211' )
+    'enable'            => true,
+    'cache_type'        => 'memcached',
+    'cache_time'        => 0,
+    'file_cachename'    => PATH_CACHE.'/cfc_data',
+    'df_prefix'         => 'mc_df_',
+    'memcache'          => array(
+        'time_out'  => 0,
+        'host'      => array('memcache://127.0.0.1:11211'),
     )
 );
 
@@ -104,15 +98,8 @@ $GLOBALS['config']['session'] = array(
 //默认时区
 $GLOBALS['config']['timezone_set'] = 'Asia/Shanghai';
 
-// url重写是否开启(本版仅在<{rewrite}><{/rewrite}>中使用rewrite替换有效)
-// 此项需要修改 PATH_DATA/rewrite.ini
-$GLOBALS['config']['use_rewrite'] = true;
-
-//指示替换网址是在编译前还是输出前，0--前者性能好，1--后者替换更彻底(此项本版没意义)
-$GLOBALS['config']['rewrite_rptype'] = 0;
-
 //cookie加密码
 $GLOBALS['config']['cookie_pwd'] = '&uop_Ysd@erw!tr';
 
 //默认上传目录
-$GLOBALS['config']['upload_dir'] = '/static/uploads';
+$GLOBALS['config']['upload_dir'] = PATH_ROOT."/uploads";

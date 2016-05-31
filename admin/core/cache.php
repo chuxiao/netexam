@@ -159,7 +159,7 @@ class cache
         if( self::_check_instance()===false ) {
             return false;
         }
-        if( self::$instance->cache_type != 'memcached' ) {
+        if( self::$cache_type != 'memcached' ) {
             self::$instance->mc_handle->close();
         }
     }
