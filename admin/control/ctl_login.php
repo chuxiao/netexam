@@ -57,4 +57,10 @@ class ctl_login
         $vdimg = new cls_securimage;
         $vdimg->show();
     }
+
+    public function logout()
+    {
+        pub_mod_auth::logout_session();
+        exit(header("location: /admin/?ct=login"));
+    }
 }

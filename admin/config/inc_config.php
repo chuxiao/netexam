@@ -16,17 +16,9 @@ define('PATH_SHARE', CORE . '/share');
 define('PATH_CONFIG', PATH_ROOT . '/config');
 define('PATH_DATA', PATH_ROOT . '/data');
 define('PATH_CACHE', PATH_DATA . '/cache');
-define('PATH_DM_CONFIG', PATH_CONFIG . '/dm_config');
-
-
-define('PATH_HTML', PATH_ROOT . '/html');  //静态文件生成目录
-define('PATH_TEST_HTML', PATH_ROOT . '/test');  //静态文件生成 测试目录
-define('SITE_URL', 'http://www.471wan.com/html');  //站点URL
-define('HTML_URL', 'http://www.471wan.com/html');  //静态预览URL
-define('HTML_TEST_URL', 'http://www.471wan.com/test');   //测试目录访问URL
 
 //主应用URL
-define('URL', 'http://www.471wan.com');
+define('URL', 'http://www.netexam.com/admin');
 define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 //session类型 file || mysql || memcache
 define('SESSION_TYPE', 'file');

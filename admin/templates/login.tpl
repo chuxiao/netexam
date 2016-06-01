@@ -2,7 +2,7 @@
 <div id="login_form">
     <form method="post" action="/admin/?ct=login&ac=auth">
         <div id="account_area">
-            <label for="account">手机号: </label>
+            <label for="account">账号: </label>
             <input id="account" name="account" type="text"></input>
         </div>
         <div id="passwd_area">

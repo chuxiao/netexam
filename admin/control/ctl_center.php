@@ -17,6 +17,34 @@ class ctl_center
 
     public function index()
     {
+        $now = time();
+        $date = date("Y-m-d", $now);
+        $datelist = cache::get("", "datelist");
+        if (!isset($datelist))
+        {
+            $datelist = array();
+        }
+        $newlist = array();
+        foreach ($datelist as $k => $v)
+        {
+            if ($k < $date)
+            {
+                cache::del("", $v);
+            }
+            else
+            {
+                $newlist[$k] = $v;
+            }
+        }
+        cache::set("", "datelist", $newlist, 0);
+        $showlist = array();
+        foreach ($newlist as $k => $v)
+        {
+            $showlist[] = array("date" => $k, "time" => $v);
+        }
+        tpl::assign("date", $date);
+        tpl::assign("time", date("H:i", $now));
+        tpl::assign("datelist", $showlist);
         tpl::assign("title", "测试中心");
         tpl::display("center.tpl");
     }
@@ -47,8 +75,14 @@ class ctl_center
         $objReader->setReadFilter($filterSubset);
         $objPHPExcel = $objReader->load($filename);
         $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-        $data = array('time' => $time, 'qa' => $sheetData);
-        cache::set('', $date, $data, 0);
+        $datelist = cache::get("", "datelist");
+        if (!isset($datelist))
+        {
+            $datelist = array();
+        }
+        $datelist[$date] = $time;
+        cache::set("", "datelist", $datelist, 0);
+        cache::set('', $date, $sheetData, 0);
         cls_msgbox::show('上传成功', '正在进行跳转......', '/admin/?ct=center');
     }
 }
