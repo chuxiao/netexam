@@ -1,4 +1,6 @@
 <{include file="header.tpl"}>
+<script type="text/javascript" src="static/js/moment.min.js"></script>
+<script type="text/javascript" src="static/js/combodate.js"></script>
 <div id="register_form">
     <form method="post" action="/?ct=register&ac=register">
         <div id="account_area">
@@ -14,11 +16,11 @@
         <div id="details">
             <label for="nickname">昵称: </label>
             <input id="nickname" name="nickname" type="text"></input>
-            <label for="gender">性别: </label>
-            <input id="gender" name="gender" type="text"></input>
+            <label>性别: </label>
+            <input type="radio" checked="checked" name="gender" value="1" />男
+            <input type="radio" name="gender" value="0" />女
             <label for="birthday">出生年月: </label>
-            <input id="birthday" name="birthday" type="text"></input>
-
+            <input id="birthday" data-format="YYYY-MM" data-template="YYYY年MM月" name="birthday" value="1970-01" type="text" />
         </div>
         <div id="verify_area">
             <label for="verify_code">验证码: </label>
@@ -28,6 +30,7 @@
         <div id="auth_area">
             <label for="auth_code">手机验证码: </label>
             <input id="auth_code" name="auth_code" type="auth_code"></input>
+            <input id="phone_code_btn" type="button" value="免费获取手机验证码"></input>
         </div>
         <div id="commit_area">
             <input id="register_btn" type="submit" value="注册"></input>
@@ -40,5 +43,23 @@
         code_img.src = '?ct=register&ac=verifycode&seed=' + Math.random();
     }
     change_code();
+    $('#birthday').combodate({minYear: 1960, maxYear: 2010});
+    var wait=60;
+    function time(o) {
+        if (wait == 0) {
+            o.removeAttribute("disabled");
+            o.value="免费获取手机验证码";
+            wait = 60;
+        }
+        else {
+            o.setAttribute("disabled", true);
+            o.value="重新发送(" + wait + ")";
+            wait--;
+            setTimeout(function() {
+                time(o)
+            }, 1000);
+        }
+    }
+    document.getElementById("phone_code_btn").onclick = function(){ time(this); }
 </script>
 <{include file="footer.tpl"}>

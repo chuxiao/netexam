@@ -31,14 +31,14 @@
         <tr>
             <td><{$item.date}></td>
             <td><{$item.time}></td>
-            <td><a href="/admin/?ct=center?ac=show?date=<{$item.date}>">查看</a><a href="/admin/uploads/<{$item.date}>.xlsx">下载</a><a href="/admin/?ct=center?ac=remove?date=<{$item.date}>">删除</a></td>
+            <td><a href="/admin/?ct=center&ac=show&date=<{$item.date}>">查看</a><a href="/admin/uploads/<{$item.date}>.xlsx">下载</a><a href="/admin/?ct=center&ac=remove&date=<{$item.date}>">删除</a></td>
         </tr>
         <{/foreach}>
     </table>
 </div>
 <script>
     $('#date').combodate({minYear: 2016, maxYear: 2020});
-    $('#time').combodate({minuteStep: 10});
+    $('#time').combodate({minuteStep: 30});
 </script>
 <a href="/admin/?ct=login&ac=logout">注销</a>
 <{include file="footer.tpl"}>

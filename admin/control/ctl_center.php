@@ -20,7 +20,7 @@ class ctl_center
         $now = time();
         $date = date("Y-m-d", $now);
         $datelist = cache::get("", "datelist");
-        if (!isset($datelist))
+        if ($datelist === false)
         {
             $datelist = array();
         }
@@ -29,6 +29,8 @@ class ctl_center
         {
             if ($k < $date)
             {
+                $filename = $GLOBALS['config']['upload_dir'].DIRECTORY_SEPARATOR.$k.".xlsx";
+                @unlink($filename);
                 cache::del("", $v);
             }
             else
@@ -43,7 +45,7 @@ class ctl_center
             $showlist[] = array("date" => $k, "time" => $v);
         }
         tpl::assign("date", $date);
-        tpl::assign("time", date("H:i", $now));
+        tpl::assign("time", date("H:00", $now));
         tpl::assign("datelist", $showlist);
         tpl::assign("title", "测试中心");
         tpl::display("center.tpl");
@@ -76,7 +78,7 @@ class ctl_center
         $objPHPExcel = $objReader->load($filename);
         $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
         $datelist = cache::get("", "datelist");
-        if (!isset($datelist))
+        if ($datelist === false)
         {
             $datelist = array();
         }
@@ -84,6 +86,31 @@ class ctl_center
         cache::set("", "datelist", $datelist, 0);
         cache::set('', $date, $sheetData, 0);
         cls_msgbox::show('上传成功', '正在进行跳转......', '/admin/?ct=center');
+    }
+
+    public function show()
+    {
+        // TODO:
+    }
+
+    public function remove()
+    {
+        $date = req::item("date", "");
+        if ($date == "")
+        {
+            exit(header("location: /admin/?ct=center"));
+        }
+        $datelist = cache::get("", "datelist");
+        if ($datelist === false)
+        {
+            exit(header("location: /admin/?ct=center"));
+        }
+        unset($datelist[$date]);
+        cache::set("", "datelist", $datelist, 0);
+        cache::del("", $date);
+        $filename = $GLOBALS['config']['upload_dir'].DIRECTORY_SEPARATOR.$date.".xlsx";
+        @unlink($filename);
+        exit(header("location: /admin/?ct=center"));
     }
 }
 require_once PATH_LIBRARY.DIRECTORY_SEPARATOR."phpexcel/PHPExcel/IOFactory.php";

@@ -10,14 +10,13 @@
             <input id="verify_code" name="verify_code" type="text"></input>
             <span class="verify_image"><img id="code_img" src="/?ct=register&ac=verifycode&time=<{$time}>" title="看不清，请点击重试" onClick="change_code()" height="25" width="76" /></span><a href="#" onClick="change_code()">换一个</a>
         </div>
-        <div id="commit_area">
-            <input id="code_btn" type="submit" value="免费获取手机验证码"></input>
-        </div>
+            <input id="phone_code_btn" type="button" value="免费获取手机验证码"></input>
     </form>
     <form method="post" action="/?ct=login&ac=auth2">
         <div id="auth_area">
             <label for="auth_code">手机验证码: </label>
             <input id="auth_code" name="auth_code" type="auth_code"></input>
+            <input id="phone_code_btn" type="button" value="免费获取手机验证码"></input>
         </div>
         <div id="commit_area">
             <input id="login_btn" type="submit" value="提交"></input>
@@ -46,6 +45,6 @@
             }, 1000);
         }
     }
-    document.getElementById("btn").onclick = function(){ time(this); }
+    document.getElementById("phone_code_btn").onclick = function(){ time(this); }
 </script>
 <{include file="footer.tpl"}>
