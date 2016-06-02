@@ -207,7 +207,6 @@ class pub_mod_auth
         }
         // 设置Cookie
         setcookie(self::$cookie_auth, $value, $cookie_expire, '/', self::$cookie_domain);
-
         // 返回
         return true;
     }

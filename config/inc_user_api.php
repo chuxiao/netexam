@@ -1,16 +1,4 @@
 <?php
-    // 上线时把demo.去掉
-    define('MYAPI_URL_MY', 'http://my.demo.115.com');               //  用户中心网址
-    define('MYAPI_URL_PASSPORT',"http://passport.demo.115.com");    //  PASSPORT 网址
-
-    // 各个项目的私KEY
-    define('MYAPI_APP_ID', 'my');                                  //  使用的API_ID
-    define('MYAPI_APP_KEY', 'AnkbzY6854wOpn2sYh');               //  使用的API_KEY
-    //-------------------------以下两项请参照注释内容进行修改    -----------------------//
-
-    define('MYAPI_SERVER_URL', MYAPI_URL_MY.'/api/user-api.php');         //  服务端网址
-    define("MYAPI_USE_CURL", true);
-
     // MYAPI COOKIE
     define('MYAPI_COOKIE', "OOFA");                                 // COOKIE 名称
     define('MYAPI_COOKIE_SESSION', 'OOFB');                         // COOKIE 名称
@@ -20,7 +8,7 @@
     define('MYAPI_COOKIE_ACCOUNT_CODE', "acaptcha");
     define('MYAPI_ONLINE_REPORT',true);                             // 是否向MY汇报在线情况
     define("MYAPI_ONLINE_INTERVAL",900);                            // 在线时间间隔 15分钟,15分钟向my汇报一次在线情况
-    define('MYAPI_COOKIE_DOMAIN',  ".471wan.com");                     // COOKIE 域名.115.com
+    define('MYAPI_COOKIE_DOMAIN',  ".netexam.com");                     // COOKIE 域名.115.com
     define('MYAPI_COOKIE_EXPIRE',1209600);                         // 自己设定的cookie 14天
     define('MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE', 60);
 

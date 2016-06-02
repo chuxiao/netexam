@@ -76,6 +76,7 @@ class ctl_login
             pub_mod_auth::authenticate2($form);
             // P3P
             pub_mod_auth::p3pheader();
+            tpl::assign("title", "重置密码");
             tpl::display("login.reset_passwd.tpl");
         }
         catch (Exception $e)
@@ -100,7 +101,22 @@ class ctl_login
     {
         if (pub_mod_auth::is_login())
         {
-            // TODO:更新密码
+            $passwd = req::item("passwd", "");
+            $passwd2 = req::item("passwd2", "");
+            if ($passwd != $passwd2)
+            {
+                cls_msgbox::show('出错了', '两次密码输入不一致');
+            }
+            else
+            {
+                $account = pub_mod_auth::get_user_id();
+                $new_passwd = strlen($passwd) == 40 ? $passwd : sha1($passwd);
+                $params = array("passwd" => $new_passwd);
+                pub_mod_user::update_user($account, $params);
+                cls_msgbox::show('登录成功', '正在为您跳转......', '/?ct=login');
+
+            }
+
         }
         else
         {
