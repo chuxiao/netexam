@@ -60,6 +60,29 @@
             }, 1000);
         }
     }
-    document.getElementById("phone_code_btn").onclick = function(){ time(this); }
+    $("#phone_code_btn").click(function() {
+        if ($("#account").val() == "") {
+            // TODO:
+            $("#account").focus();
+        }
+        else if($("#verify_code").val() == "") {
+            // TODO:
+            $("#verify_code").focus();
+        }
+        else {
+            $.post({
+            url: "/?ct=login&ac=get_mobile_key",
+            data: {
+                account: $("#account").val(),
+                verify_code: $("#verify_code").val()
+                }
+            });
+            time(this);
+        }
+    });
+    $("#register_btn").click(function() {
+        if ($("#account").val() == "") {
+            $("#account").focus();
+    });
 </script>
 <{include file="footer.tpl"}>
