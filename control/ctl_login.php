@@ -68,6 +68,8 @@ class ctl_login
         $form['ip']     = util::get_client_ip();
         $form['code']   = req::item('verify_code');
         $form['login_time'] = time();
+        $form['account'] = req::item('account');
+        $form['auth_code'] = req::item('auth_code');
         try
         {
             // 登陆行为

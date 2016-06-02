@@ -128,6 +128,7 @@ class pub_mod_auth
         {
             throw new Exception(serialize(array('code' => '验证码不能为空')));
         }
+        /*
         if (!isset($_COOKIE[self::$cookie_user_code]))
         {
             throw new Exception(serialize(array('code' => '手机验证码失效')));
@@ -150,8 +151,9 @@ class pub_mod_auth
         {
             throw new Exception(serialize(array('code' => '手机验证码不正确')));
         }
+         */
 
-        $result = pub_mod_user::get_one_userinfo($cookie_data['account']);
+        $result = pub_mod_user::get_one_userinfo($data['account']);
         if (empty($result))
         {
             throw new Exception(serialize(array('account' => '帐号不存在')));

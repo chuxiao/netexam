@@ -96,8 +96,10 @@ class pub_mod_register
             $data_details['user_id']      = $data['account'];
             $data_details['reg_ip']       = ip2long(util::get_client_ip());   // 注册IP
             $data_details['reg_time']     = time();                                // 注册时间
-            $data_details['name']         = $data['nickname'];             // 真实姓名
+            $data_details['nickname']     = $data['nickname'];             // 真实姓名
             $data_details['points']       = 0;
+            $data_details['gender']       = $data['gender'];
+            $data_details['birthday']     = $data['birthday']."-01";
 
             $handle = pub_mod_user::insert_user_details($user_id, $data_details);
             if (!$handle)

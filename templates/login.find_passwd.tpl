@@ -1,6 +1,6 @@
 <{include file="header.tpl"}>
 <div id="find_passwd_form">
-    <form method="post" action="/?ct=login&ac=get_mobile_key">
+    <form method="post" action="/?ct=login&ac=auth2" onsubmit="return submit_check()">
         <div id="account_area">
             <label for="account">手机号: </label>
             <input id="account" name="account" type="text"></input>
@@ -10,9 +10,6 @@
             <input id="verify_code" name="verify_code" type="text"></input>
             <span class="verify_image"><img id="code_img" src="/?ct=register&ac=verifycode&time=<{$time}>" title="看不清，请点击重试" onClick="change_code()" height="25" width="76" /></span><a href="#" onClick="change_code()">换一个</a>
         </div>
-            <input id="phone_code_btn" type="button" value="免费获取手机验证码"></input>
-    </form>
-    <form method="post" action="/?ct=login&ac=auth2">
         <div id="auth_area">
             <label for="auth_code">手机验证码: </label>
             <input id="auth_code" name="auth_code" type="auth_code"></input>
@@ -45,6 +42,43 @@
             }, 1000);
         }
     }
-    document.getElementById("phone_code_btn").onclick = function(){ time(this); }
+    $("#phone_code_btn").click(function() {
+        if ($("#account").val() == "") {
+            // TODO:
+            $("#account").focus();
+        }
+        else if($("#verify_code").val() == "") {
+            // TODO:
+            $("#verify_code").focus();
+        }
+        else {
+            $.post({
+            url: "/?ct=login&ac=get_mobile_key",
+            data: {
+                account: $("#account").val(),
+                verify_code: $("#verify_code").val()
+                }
+            });
+            time(this);
+        }
+    });
+    function submit_check() {
+        if ($("#account").val() == "") {
+            // TODO:
+            $("#account").focus();
+            return false;
+        }
+        if ($("#verify_code").val() == "") {
+            // TODO:
+            $("#verify_code").focus();
+            return false;
+        }
+        if ($("#auth_code").val() == "") {
+            // TODO:
+            $("#auth_code").focus();
+            return false;
+        }
+        return true;
+    }
 </script>
 <{include file="footer.tpl"}>

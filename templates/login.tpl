@@ -1,6 +1,6 @@
 <{include file="header.tpl"}>
 <div id="login_form">
-    <form method="post" action="/?ct=login&ac=auth">
+    <form method="post" action="/?ct=login&ac=auth" onsubmit="return submit_check()" >
         <div id="account_area">
             <label for="account">手机号: </label>
             <input id="account" name="account" type="text"></input>
@@ -27,5 +27,23 @@
         code_img.src = '?ct=register&ac=verifycode&seed=' + Math.random();
     }
     change_code();
+    function submit_check() {
+        if ($("#account").val() == "") {
+            // TODO:
+            $("#account").focus();
+            return false;
+        }
+        if ($("#passwd").val() == "") {
+            // TODO:
+            $("#passwd").focus();
+            return false;
+        }
+        if ($("#verify_code").val() == "") {
+            // TODO:
+            $("#verify_code").focus();
+            return false;
+        }
+        return true;
+    };
 </script>
 <{include file="footer.tpl"}>

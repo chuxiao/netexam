@@ -2,7 +2,7 @@
 <script type="text/javascript" src="static/js/moment.min.js"></script>
 <script type="text/javascript" src="static/js/combodate.js"></script>
 <div id="register_form">
-    <form method="post" action="/?ct=register&ac=register">
+    <form method="post" action="/?ct=register&ac=register" onsubmit="return submit_check()">
         <div id="account_area">
             <label for="account">手机号: </label>
             <input id="account" name="account" type="text"></input>
@@ -80,9 +80,45 @@
             time(this);
         }
     });
-    $("#register_btn").click(function() {
+    function submit_check() {
         if ($("#account").val() == "") {
+            // TODO:
             $("#account").focus();
-    });
+            return false;
+        }
+        if ($("#passwd").val() == "") {
+            // TODO:
+            $("#passwd").focus();
+            return false;
+        }
+        if ($("#passwd2").val() == "") {
+            // TODO:
+            $("#passwd2").focus();
+            return false;
+        }
+        if ($("#passwd").val() != $("#passwd2").val()) {
+            // TODO:
+            $("#passwd").val("");
+            $("#passwd2").val("");
+            $("#passwd").focus();
+            return false;
+        }
+        if ($("#nickname").val() == "") {
+            // TODO:
+            $("#nickname").focus();
+            return false;
+        }
+        if ($("#verify_code").val() == "") {
+            // TODO:
+            $("#verify_code").focus();
+            return false;
+        }
+        if ($("#auth_code").val() == "") {
+            // TODO:
+            $("#auth_code").focus();
+            return false;
+        }
+        return true;
+    }
 </script>
 <{include file="footer.tpl"}>

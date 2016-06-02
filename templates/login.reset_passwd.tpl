@@ -1,6 +1,6 @@
 <{include file="header.tpl"}>
 <div id="reset_passwd_form">
-    <form method="post" action="/?ct=login&ac=reset_passwd">
+    <form method="post" action="/?ct=login&ac=reset_passwd" onsubmit="return submit_check()">
         <div id="passwd_area">
             <label for="passwd">密码: </label>
             <input id="passwd" name="passwd" type="password"></input>
@@ -14,4 +14,26 @@
         </div>
     </form>
 </div>
+<script>
+    function submit_check() {
+        if ($("#passwd").val() == "") {
+            // TODO:
+            $("#passwd").focus();
+            return false;
+        }
+        if ($("#passwd2").val() == "") {
+            // TODO:
+            $("#passwd2").focus();
+            return false;
+        }
+        if ($("#passwd").val() != $("#passwd2").val()) {
+            // TODO:
+            $("#passwd").val("");
+            $("#passwd2").val("");
+            $("#passwd").focus();
+            return false;
+        }
+        return true;
+    }
+</script>
 <{include file="footer.tpl"}>
