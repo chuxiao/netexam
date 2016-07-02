@@ -18,11 +18,13 @@ class ctl_center
     public function index()
     {
         $now = time();
-        $date = date("Y-m-d", $now);
-        $datelist = cache::get("", "datelist");
-        if ($datelist === false)
+
+        // 玩家答题数据只保留一周的，过期数据清除
+        $before = $now - 7 * 24 * 60 * 60;
+        for ($i = 0; $i < 8; ++$i)
         {
-            $datelist = array();
+            $sql = "delete from user_answer_0{$i} where create_time < {$before}";
+            db::query($sql);
         }
         $newlist = array();
         foreach ($datelist as $k => $v)
