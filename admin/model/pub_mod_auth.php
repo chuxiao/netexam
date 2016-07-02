@@ -74,7 +74,7 @@ class pub_mod_auth
         }
 
         // 密码不正确
-        if ($result['passwd'] != md5($data['passwd']))
+        if ($result['passwd'] != $data['passwd'])
         {
             throw new Exception(serialize(array('account' => '密码错误')));
         }

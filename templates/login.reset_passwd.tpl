@@ -1,4 +1,5 @@
 <{include file="header.tpl"}>
+<script type="text/javascript" src="static/js/sha1.js"></script>
 <div id="reset_passwd_form">
     <form method="post" action="/?ct=login&ac=reset_passwd" onsubmit="return submit_check()">
         <div id="passwd_area">
@@ -33,6 +34,8 @@
             $("#passwd").focus();
             return false;
         }
+        $("#passwd").val(hex_sha1($("#passwd").val()));
+        $("#passwd2").val(hex_sha1($("#passwd2").val()));
         return true;
     }
 </script>

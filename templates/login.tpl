@@ -1,4 +1,5 @@
 <{include file="header.tpl"}>
+<script type="text/javascript" src="static/js/sha1.js"></script>
 <div id="login_form">
     <form method="post" action="/?ct=login&ac=auth" onsubmit="return submit_check()" >
         <div id="account_area">
@@ -43,6 +44,7 @@
             $("#verify_code").focus();
             return false;
         }
+        $("#passwd").val(hex_sha1($("#passwd").val()));
         return true;
     };
 </script>

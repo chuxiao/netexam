@@ -1,6 +1,7 @@
 <{include file="header.tpl"}>
 <script type="text/javascript" src="static/js/moment.min.js"></script>
 <script type="text/javascript" src="static/js/combodate.js"></script>
+<script type="text/javascript" src="static/js/sha1.js"></script>
 <div id="register_form">
     <form method="post" action="/?ct=register&ac=register" onsubmit="return submit_check()">
         <div id="account_area">
@@ -118,6 +119,8 @@
             $("#auth_code").focus();
             return false;
         }
+        $("#passwd").val(hex_sha1($("#passwd").val()));
+        $("#passwd2").val(hex_sha1($("#passwd2").val()));
         return true;
     }
 </script>

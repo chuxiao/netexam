@@ -1,6 +1,7 @@
 <{include file="header.tpl"}>
+<script type="text/javascript" src="static/js/md5.js"></script>
 <div id="login_form">
-    <form method="post" action="/admin/?ct=login&ac=auth">
+    <form method="post" action="/admin/?ct=login&ac=auth" onsubmit="return submit_check()" >
         <div id="account_area">
             <label for="account">账号: </label>
             <input id="account" name="account" type="text"></input>
@@ -25,5 +26,24 @@
         code_img.src = '/admin/?ct=login&ac=verifycode&seed=' + Math.random();
     }
     change_code();
+    function submit_check() {
+        if ($("#account").val() == "") {
+            // TODO:
+            $("#account").focus();
+            return false;
+        }
+        if ($("#passwd").val() == "") {
+            // TODO:
+            $("#passwd").focus();
+            return false;
+        }
+        if ($("#verify_code").val() == "") {
+            // TODO:
+            $("#verify_code").focus();
+            return false;
+        }
+        $("#passwd").val(hex_md5($("#passwd").val()));
+        return true;
+    };
 </script>
 <{include file="footer.tpl"}>
