@@ -45,12 +45,6 @@ class pub_mod_register
             throw new Exception(serialize(array('passwd' => '密码不能为空')));
         }
 
-        // 密码长度错误
-        if (!cls_validate::len($data['passwd'], 6, 20))
-        {
-            throw new Exception(serialize(array('passwd' => '密码长度错误')));
-        }
-
         //两次输入密码是否相同
         if ($data['passwd'] != $data['re_passwd'])
         {

@@ -18,37 +18,15 @@ class ctl_center
     public function index()
     {
         $now = time();
+        // 玩家答题数据只保留30天内的，过期数据清除
+        pub_mod_user_answer::delete_old_data($now - 30 * 24 * 60 * 60);
 
-        // 玩家答题数据只保留一周的，过期数据清除
-        $before = $now - 7 * 24 * 60 * 60;
-        for ($i = 0; $i < 8; ++$i)
-        {
-            $sql = "delete from user_answer_0{$i} where create_time < {$before}";
-            db::query($sql);
-        }
-        $newlist = array();
-        foreach ($datelist as $k => $v)
-        {
-            if ($k < $date)
-            {
-                $filename = $GLOBALS['config']['upload_dir'].DIRECTORY_SEPARATOR.$k.".xlsx";
-                @unlink($filename);
-                cache::del("", $v);
-            }
-            else
-            {
-                $newlist[$k] = $v;
-            }
-        }
-        cache::set("", "datelist", $newlist, 0);
-        $showlist = array();
-        foreach ($newlist as $k => $v)
-        {
-            $showlist[] = array("date" => $k, "time" => $v);
-        }
+        // 获取考试排期数据
+        $exams = pub_mod_exam::get_all_exam_info();
+        $date = date("Y-m-d", $now);
         tpl::assign("date", $date);
         tpl::assign("time", date("H:00", $now));
-        tpl::assign("datelist", $showlist);
+        tpl::assign("exams", $exams);
         tpl::assign("title", "测试中心");
         tpl::display("center.tpl");
     }
@@ -58,7 +36,6 @@ class ctl_center
 
         $date = req::item('date', '');
         $time = req::item('time', '');
-
         if ($date == '' || $time == '')
         {
             cls_msgbox::show('日期或时间为空', '请重新设置......', '/admin/?ct=center');
@@ -67,60 +44,92 @@ class ctl_center
         {
             cls_msgbox::show('文件上传失败', '请重新上传......', '/admin/?ct=center');
         }
-        $filename = $GLOBALS['config']['upload_dir'].DIRECTORY_SEPARATOR.$date.".xlsx";
+        $now = time();
+        $filename = $GLOBALS['config']['upload_dir'].DIRECTORY_SEPARATOR.$now.".xlsx";
         if (!req::move_upload_file('file', $filename))
         {
             cls_msgbox::show('文件拷贝失败', '请重新上传......', '/admin/?ct=center');
         }
         require_once PATH_LIBRARY.DIRECTORY_SEPARATOR."phpexcel/PHPExcel/IOFactory.php";
-        $filterSubset = new MyReadFilter();
+        // 当前情况下每期最多100道题
+        $filterSubset = new MyReadFilter(2, 101, 'A', 'O');
         $objReader = PHPExcel_IOFactory::createReader("Excel2007");
         $objReader->setReadDataOnly(true);
         $objReader->setReadFilter($filterSubset);
         $objPHPExcel = $objReader->load($filename);
         $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-        $datelist = cache::get("", "datelist");
-        if ($datelist === false)
+        $valid_data = array();
+        foreach ($sheetData as $entry)
         {
-            $datelist = array();
+            if (isset($entry['A']) && $entry != null)
+            {
+                $valid_data[] = $entry;
+            }
         }
-        $datelist[$date] = $time;
-        cache::set("", "datelist", $datelist, 0);
-        cache::set('', $date, $sheetData, 0);
+        $question_count = count($valid_data);
+        if ($question_count > 0)
+        {
+            $exam_id = pub_mod_exam::add_exam_info($date, $time, $now.'.xlsx', $question_count);
+            foreach ($valid_data as $entry)
+            {
+                pub_mod_question::add_question_info($exam_id, $entry['A'], $entry['B'], $entry['C'], $entry['D'], $entry['E'], $entry['F'], $entry['G'], $entry['H'], $entry['I'], $entry['J'], $entry['K'], $entry['L'], $entry['M'], $entry['N'], $entry['O']);
+            }
+        }
         cls_msgbox::show('上传成功', '正在进行跳转......', '/admin/?ct=center');
     }
 
     public function show()
     {
-        // TODO:
+        $id = req::item("id", "");
+        if ($id == "")
+        {
+            exit(header("location: /admin/?ct=center"));
+        }
+        $exam = pub_mod_exam::get_one_exam_info($id);
+        $questions = pub_mod_question::get_exam_questions($exam['id']);
+        for ($i = 0; $i < count($questions); ++$i)
+        {
+            $questions[$i]['id'] = $i + 1;
+        }
+        tpl::assign("exam", $exam);
+        tpl::assign("questions", $questions);
+        tpl::assign("title", "考试内容");
+        tpl::display("questions.tpl");
     }
 
     public function remove()
     {
-        $date = req::item("date", "");
-        if ($date == "")
+        $id = req::item("id", "");
+        if ($id == "")
         {
             exit(header("location: /admin/?ct=center"));
         }
-        $datelist = cache::get("", "datelist");
-        if ($datelist === false)
-        {
-            exit(header("location: /admin/?ct=center"));
-        }
-        unset($datelist[$date]);
-        cache::set("", "datelist", $datelist, 0);
-        cache::del("", $date);
-        $filename = $GLOBALS['config']['upload_dir'].DIRECTORY_SEPARATOR.$date.".xlsx";
+        $exam = pub_mod_exam::get_one_exam_info($id);
+        $filename = $GLOBALS['config']['upload_dir'].DIRECTORY_SEPARATOR.$exam['file_name'];
         @unlink($filename);
+        pub_mod_exam::delete_exam_info($id);
         exit(header("location: /admin/?ct=center"));
     }
 }
 require_once PATH_LIBRARY.DIRECTORY_SEPARATOR."phpexcel/PHPExcel/IOFactory.php";
 class MyReadFilter implements PHPExcel_Reader_IReadFilter
 {
+    private $min_row;
+    private $max_row;
+    private $min_col;
+    private $max_col;
+
+    public function __construct($min_row, $max_row, $min_col, $max_col)
+    {
+        $this->min_row = $min_row;
+        $this->max_row = $max_row;
+        $this->min_col = $min_col;
+        $this->max_col = $max_col;
+    }
+
     public function readCell($column, $row, $worksheetName = '') {
-        if ($row >= 1 && $row <= 7) {
-            if (in_array($column,range('A','E'))) {
+        if ($row >= $this->min_row && $row <= $this->max_row) {
+            if (in_array($column,range($this->min_col, $this->max_col))) {
                 return true;
             }
         }

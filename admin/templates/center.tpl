@@ -20,18 +20,16 @@
         </div>
     </form>
 </div>
-<div id="datelist">
+<div id="exams">
     <table border="1">
         <tr>
-            <th>日期</th>
             <th>开启时间</th>
             <th>操作</th>
         </tr>
-        <{foreach item=item from=$datelist}>
+        <{foreach item=item from=$exams}>
         <tr>
-            <td><{$item.date}></td>
-            <td><{$item.time}></td>
-            <td><a href="/admin/?ct=center&ac=show&date=<{$item.date}>">查看</a><a href="/admin/uploads/<{$item.date}>.xlsx">下载</a><a href="/admin/?ct=center&ac=remove&date=<{$item.date}>">删除</a></td>
+            <td><{$item.effect_time}></td>
+            <td><a href="/admin/?ct=center&ac=show&id=<{$item.id}>">查看</a><a href="/admin/uploads/<{$item.file_name}>">下载</a><a href="/admin/?ct=center&ac=remove&id=<{$item.id}>">删除</a></td>
         </tr>
         <{/foreach}>
     </table>

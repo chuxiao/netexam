@@ -1,3 +1,4 @@
 <{include file="header.tpl"}>
-<p>这里是测试中心</p>
+<p><{$exam_str}></p>
+<p><{$rank_str}></p>
 <{include file="footer.tpl"}>

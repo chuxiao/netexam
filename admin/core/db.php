@@ -265,7 +265,7 @@ class db
     {
         $rsid = self::_get_rsid( $rsid );
         $row = $rsid->fetch_assoc();
-        return $row;
+        return empty($row) ? false : $row;
     }
 
     /**
