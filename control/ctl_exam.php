@@ -49,7 +49,7 @@ class ctl_exam
             for ($i = 0; $i < $count; ++i)
             {
                 $id = $i + 1;
-                $questions[$i]['id'] = $id;
+                $questions[$i]['qid'] = $id;
                 cache::set("question", $eid."_".$id, $q);
             }
             $current_question = $questions[0];
@@ -58,5 +58,23 @@ class ctl_exam
         tpl::assign("total_count", $count);
         tpl::assign("question", $current_question);
         tpl::display("exam.tpl");
+    }
+
+    public function next_q()
+    {
+        $eid = req::item('eid', 0);
+        $qid = req::item('qid', 0);
+        if ($eid == 0 || $qid == 0)
+        {
+            cls_msgbox::show('参数错误', '正在为您跳转......', '/?ct=center');
+            exit();
+        }
+        $current_exam = cache::get("question", $eid."_".$qid);
+        if ($current_exam == false)
+        {
+            cls_msgbox::show('内部错误', '没有找到相关考题，请联系管理员......', '/?ct=center');
+            exit();
+        }
+        echo json_encode($current_exam);
     }
 }

@@ -1,14 +1,12 @@
 <{include file="header.tpl"}>
 <div id="basic">
-    <p>考试时间: <{$exam.effect_time}></p>
-    <p><a href="/admin/uploads/<{$exam.file_name}>">文件下载</a></p>
-    <p>题目数量: <{$exam.question_count}></p>
-    <p><a href="/admin/?ct=center">返回</a></p>
+    <p>当前题号: <span id="current_num"><{$question.qid}></span></p>
+    <p>总题数: <{$total_count}></p>
+    <p>本题分值: <{$question.score}></p>
+    <p><input type="button" onClick="next_question()">下一题</input>
 </div>
-<h3>题目内容</h3>
 <div>
-<{foreach item=item from=$questions}>
-<h5>第<{$item.id}>题</h5>
+<p>剩余时间:<span id="timer"><{$question.timer}></span></p>
 <p><{$item.question}><p>
 <p>A: <{$item.A}></p>
 <p>B: <{$item.B}></p>
@@ -36,8 +34,63 @@
 <{if $item.J}>
 <p>J: <{$item.J}></p>
 <{/if}>
-<p>正确答案:<{$item.answer}></p>
-<p>本题分数:<{$item.score}> 答题时间:<{$item.timer}> 反馈时间:<{$item.keep_time}></p>
 <{/foreach}>
-</div>
+<script type="text/javascript">
+    var time_left = <{$question.timer}>;
+    var time_keep = <{$question.keep_time}>;
+    var eid = <{$question.eid}>;
+    var qid = <{$question.qid}>;
+    var question = "";
+    var A = "";
+    var B = "";
+    var C = "";
+    var D = "";
+    var E = "";
+    var F = "";
+    var G = "";
+    var H = "";
+    var I = "";
+    var J = "";
+    var answer = "";
+    var score = 0;
+    var phase = 1;
+    function next_question()
+    {
+        // 提交结果
+        // 获取下一道题目信息
+    }
+    function timer()
+    {
+        if (phase == 1)
+        {
+            // 答题倒计时
+            if (time_left == 0)
+            {
+                // 提交结果
+                // 获取下一道题目信息
+                phase = 2;
+            }
+            else
+            {
+                $("#timer").val(time_left);
+                --time_left;
+            }
+        }
+        else if (phase == 2)
+        {
+            // 反馈倒计时
+            if (time_keep == 0)
+            {
+                // 更新题目
+                phase = 1;
+            }
+            else
+            {
+                --time_keep;
+            }
+        }
+        setTimeout("timer()", 1000);
+    };
+    timer();
+</script>
 <{include file="footer.tpl"}>
