@@ -64,17 +64,88 @@ class ctl_exam
     {
         $eid = req::item('eid', 0);
         $qid = req::item('qid', 0);
+        $result = req::item('result', '');
         if ($eid == 0 || $qid == 0)
         {
             cls_msgbox::show('参数错误', '正在为您跳转......', '/?ct=center');
             exit();
         }
-        $current_exam = cache::get("question", $eid."_".$qid);
-        if ($current_exam == false)
+        $current_question = cache::get("question", $eid."_".$qid);
+        if ($current_question == false)
         {
             cls_msgbox::show('内部错误', '没有找到相关考题，请联系管理员......', '/?ct=center');
             exit();
         }
-        echo json_encode($current_exam);
+        $id = $current_question['id'];
+        $score = $current_question['score'];
+        if ($result != $current_question['answer'])
+        {
+            $score = 0;
+        }
+        $accout = pub_mod_auth::get_current_user_id();
+        pub_mod_answer::insert_question_answer($account, $id, $result, $score);
+        $current_exam = cache::get("exam", $eid);
+        if ($current_exam == false)
+        {
+            cls_msgbox::show('内部错误', '没有找到相关考试，请联系管理员......', '/?ct=center');
+            exit();
+        }
+        if ($qid == $current_exam['question_count'])
+        {
+            echo json_encode(array('ret' => 2));
+            exit();
+        }
+        else
+        {
+            ++$qid;
+            $next_question = cache::get("question", $eid."_".$qid);
+            if ($next_question == false)
+            {
+                cls_msgbox::show('内部错误', '没有找到相关考题，请联系管理员......', '/?ct=center');
+                exit();
+            }
+            $next_question['ret'] = 1;
+            echo json_encode($next_question);
+        }
+    }
+
+    public function over()
+    {
+        $eid = req::item('eid', 0);
+        if ($eid == 0)
+        {
+            cls_msgbox::show('参数错误', '正在为您跳转......', '/?ct=center');
+            exit();
+        }
+        $current_exam = cache::get("exam", $eid);
+        if ($current_exam == false)
+        {
+            cls_msgbox::show('内部错误', '没有找到相关考试，请联系管理员......', '/?ct=center');
+            exit();
+        }
+        $begin_time = $current_exam['effect_time'];
+        $end_time = time();
+        $accout = pub_mod_auth::get_current_user_id();
+        $answers = pub_mod_answer::get_question_answer_duration($account, $begin_time, $end_time);
+        $right = 0;
+        $wrong = 0;
+        $total_score = 0;
+        foreach ($answers as $v)
+        {
+            if ($v['score'] > 0)
+            {
+                ++$right;
+                $total_score += $v['score'];
+            }
+            else
+            {
+                ++$wrong;
+            }
+        }
+        pub_mod_score::insert_exam_score($accout, $eid, $total_score);
+        tpl::assign("right", $right);
+        tpl::assign("wrong", $wrong);
+        tpl::assign("total_score", $total_score);
+        tpl::display("exam_stat.tpl");
     }
 }

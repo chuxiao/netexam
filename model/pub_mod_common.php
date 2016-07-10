@@ -57,6 +57,20 @@ class pub_mod_common
                 $item_value = str_pad(substr($item_value, -2) % 8, 2, "0", STR_PAD_LEFT);
                 return 'user_' . $item_value;
                 break;
+            case 'user_answer':
+                //$item_value 为 $user_id
+                //100张表改为8张表 user_00 user_01 user_02 user_03 user_04
+                //$item_value = str_pad(substr($item_value, -2), 2, "0", STR_PAD_LEFT);
+                $item_value = str_pad(substr($item_value, -2) % 8, 2, "0", STR_PAD_LEFT);
+                return 'user_answer_' . $item_value;
+                break;
+            case 'user_exam':
+                //$item_value 为 $user_id
+                //100张表改为8张表 user_00 user_01 user_02 user_03 user_04
+                //$item_value = str_pad(substr($item_value, -2), 2, "0", STR_PAD_LEFT);
+                $item_value = str_pad(substr($item_value, -2) % 8, 2, "0", STR_PAD_LEFT);
+                return 'user_exam_' . $item_value;
+                break;
             default:
                 echo "<pre>";
                 echo "Table not exist\n";

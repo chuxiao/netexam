@@ -101,3 +101,10 @@ $GLOBALS['config']['cookie_pwd'] = '&uop_Ysd@erw!tr';
 
 //默认上传目录
 $GLOBALS['config']['upload_dir'] = '/static/uploads';
+
+// 短信验证
+$GLOBALS['config']['mobile_key'] = array(
+    'url' => 'http://223.73.117.169/msg/HttpBatchSendSM/?',
+    'account' => 'N9982354',
+    'passwd' => 'Psde4e6a',
+);

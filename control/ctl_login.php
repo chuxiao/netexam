@@ -131,7 +131,13 @@ class ctl_login
         try
         {
             pub_mod_auth::check_user_and_captcha($form);
-            // TODO: 发送手机验证码
+            // 发送手机验证码
+            $mobile_key = pub_mod_auth::get_mobile_key();
+            $msg = "您的验证码是: ".$mobile_key.",请立即使用.";
+            $user_id = pub_mod_user::get_user_id();
+            $url = $GLOBALS['config']['mobile_key']['url'].'account='.$GLOBALS['config']['mobile_key']['account'].'&pswd='.$GLOBALS['config']['mobile_key']['passwd'].'&mobile='.$user_id.'&msg='.$msg.'&needstatus=false';
+            file_get_contents($url);
+
         }
         catch (Exception $e)
         {

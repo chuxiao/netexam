@@ -47,30 +47,7 @@ class pub_mod_user
     {
         $table_name = pub_mod_common::get_split_table($account, "user_details");
         $sql = "SELECT * FROM `{$table_name}` WHERE `user_id`='{$account}'";
-        $return = db::get_one($sql);
-
-        if ($return)
-        {
-            /* 安全密保 */
-            if (!empty($return['safe_aq']) && $return['safe_aq']!="Array")
-            {
-                if (!is_array($return['safe_aq']))
-                {
-                    $return['safe_aq'] = unserialize($return['safe_aq']);
-                }
-            }
-            /* 实名验证信息 */
-            if (!empty($return['verify_info']) && $return['verify_info']!="Array")
-            {
-                $return['verify_info'] = unserialize($return['verify_info']);
-            }
-        }
-        else
-        {
-            return false;
-        }
-
-        return $return;
+        return db::get_one($sql);
     }
 
 
