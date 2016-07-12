@@ -75,8 +75,8 @@ class log
         //计算实际路径及文件名
         if( !preg_match('#/#', $path_name) )
         {
-            self::$log_paths[$path] = $base_path.'/'.$path_name.'.log';
-            return self::$log_paths[$path];
+            self::$log_paths[$path_name] = $base_path.'/'.$path_name.'.log';
+            return self::$log_paths[$path_name];
         }
         else
         {
