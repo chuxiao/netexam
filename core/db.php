@@ -180,7 +180,6 @@ class db
 
         try
         {
-            file_put_contents('/tmp/sql.txt', $sql . "\n", FILE_APPEND);
             self::$cur_result = self::$cur_link->query($sql);
             //记录慢查询
             if( self::$log_slow_query )

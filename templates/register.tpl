@@ -72,7 +72,7 @@
         }
         else {
             $.post({
-            url: "/?ct=login&ac=get_mobile_key",
+            url: "/?ct=register&ac=get_mobile_key",
             data: {
                 account: $("#account").val(),
                 verify_code: $("#verify_code").val()

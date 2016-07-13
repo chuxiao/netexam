@@ -63,4 +63,39 @@ class ctl_register
     {
         pub_mod_auth::make_verify_code();
     }
+
+    public function get_mobile_key()
+    {
+        $form['code'] = req::item("verify_code");
+        $form['account'] = req::item("account");
+        try
+        {
+            pub_mod_auth::check_captcha($form);
+            // 发送手机验证码
+            $mobile_key = pub_mod_auth::get_mobile_key();
+            $msg = "【创蓝文化】您的验证码是: ".$mobile_key.",请立即使用.";
+            $user_id = $fom['account'];
+            $url = $GLOBALS['config']['mobile_key']['url'].'account='.$GLOBALS['config']['mobile_key']['account'].'&pswd='.$GLOBALS['config']['mobile_key']['passwd'].'&mobile='.$user_id.'&msg='.$msg.'&needstatus=true';
+            $ret = file_get_contents($url);
+            $filename = date("Ym").'/'.date("Ymd");
+            log::add($filename, $user_id.'    '.$msg.'    '.$ret);
+
+        }
+        catch (Exception $e)
+        {
+            if ($arr_error = @unserialize($e->getMessage()))
+            {
+                foreach ($arr_error as $key=>$value)
+                {
+                    $title = $key;
+                    $content = $value;
+                }
+                cls_msgbox::show($title, $value, -1);
+            }
+            else
+            {
+                cls_msgbox::show('出错了', $e->getCode());
+            }
+        }
+    }
 }

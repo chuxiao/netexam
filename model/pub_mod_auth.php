@@ -25,6 +25,30 @@ class pub_mod_auth
 
 
     /**
+     * 检查验证码
+     *
+     */
+    public static function check_captcha($data)
+    {
+        // 验证码不能为空
+        if (empty($data['code']))
+        {
+            throw new Exception(serialize(array('code' => '验证码不能为空')));
+        }
+        $code = new mod_captcha;
+        $value  = $code->authcode($_COOKIE[self::$cookie_captcha], 'DECODE', $GLOBALS['config']['cookie_pwd']);
+        if (strtolower($data['code'])!=strtolower($value))
+        {
+            throw new Exception(serialize(array('code' => '验证码不正确或超时')));
+        }
+        if (empty($data['account']))
+        {
+            throw new Exception(serialize(array('account' => '请输入手机呈码')));
+        }
+        return true;
+    }
+
+    /**
      * 检查用户名和验证码
      *
      */
