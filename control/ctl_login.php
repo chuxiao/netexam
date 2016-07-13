@@ -137,7 +137,7 @@ class ctl_login
             $user_id = pub_mod_user::get_user_id();
             $url = $GLOBALS['config']['mobile_key']['url'].'account='.$GLOBALS['config']['mobile_key']['account'].'&pswd='.$GLOBALS['config']['mobile_key']['passwd'].'&mobile='.$user_id.'&msg='.$msg.'&needstatus=true';
             $ret = file_get_contents($url);
-            $filename = date("Ym");
+            $filename = date("Ym").'/'.date("Ymd");
             log::add($filename, $user_id.'    '.$msg.'    '.$ret);
 
         }

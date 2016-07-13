@@ -8,7 +8,7 @@
     define('MYAPI_COOKIE_ACCOUNT_CODE', "acaptcha");
     define('MYAPI_ONLINE_REPORT',true);                             // 是否向MY汇报在线情况
     define("MYAPI_ONLINE_INTERVAL",900);                            // 在线时间间隔 15分钟,15分钟向my汇报一次在线情况
-    define('MYAPI_COOKIE_DOMAIN',  ".netexam.com");                     // COOKIE 域名.115.com
+    define('MYAPI_COOKIE_DOMAIN',  "exam.jd119.org");                     // COOKIE 域名.115.com
     define('MYAPI_COOKIE_EXPIRE',1209600);                         // 自己设定的cookie 14天
     define('MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE', 60);
 

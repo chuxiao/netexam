@@ -21,7 +21,7 @@ define('PATH_CACHE', PATH_DATA . '/cache');
 define('COOKIE_DOMAIN', '');
 
 //主应用URL
-define('URL', 'http://www.netexam.com');
+define('URL', 'http://exam.jd119.org');
 define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 //session类型 file || mysql || memcache
 define('SESSION_TYPE', 'file');
