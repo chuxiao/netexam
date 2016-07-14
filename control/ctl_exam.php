@@ -46,11 +46,11 @@ class ctl_exam
                 cls_msgbox::show('内部错误', '没有找到相关考题，请联系管理员......', '/?ct=center');
                 exit();
             }
-            for ($i = 0; $i < $count; ++i)
+            for ($i = 0; $i < $count; ++$i)
             {
                 $id = $i + 1;
                 $questions[$i]['qid'] = $id;
-                cache::set("question", $eid."_".$id, $q);
+                cache::set("question", $eid."_".$id, $questions[$i]);
             }
             $current_question = $questions[0];
         }

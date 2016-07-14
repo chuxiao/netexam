@@ -474,11 +474,10 @@ class mod_captcha {
         return $hash;
     }
 
-    function make_seccode($length)
+    function make_seccode($seccodeunits = 'BCEFGHJKMPQRTVWXY2346789', $length = 6)
     {
         $seccode = $this->random(6, 1);//6位的随机数字
         $s = sprintf("%0{$length}s", base_convert($seccode, 10, 24));
-        $seccodeunits = 'BCEFGHJKMPQRTVWXY2346789';
         $seccode = '';
         for($i = 0; $i < $length; $i++) {
             $unit = ord($s{$i});

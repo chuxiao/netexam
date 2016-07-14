@@ -8,7 +8,7 @@
         <div id="verify_area">
             <label for="verify_code">验证码: </label>
             <input id="verify_code" name="verify_code" type="text"></input>
-            <span class="verify_image"><img id="code_img" src="/?ct=register&ac=verifycode&time=<{$time}>" title="看不清，请点击重试" onClick="change_code()" height="25" width="76" /></span><a href="#" onClick="change_code()">换一个</a>
+            <span class="verify_image"><img id="code_img" src="" height="30" width="100" /></span><a href="#" onClick="change_code()">获取验证码</a>
         </div>
         <div id="auth_area">
             <label for="auth_code">手机验证码: </label>
@@ -25,7 +25,6 @@
         var code_img = document.getElementById('code_img');
         code_img.src = '?ct=register&ac=verifycode&seed=' + Math.random();
     }
-    change_code();
     var wait=60;
     function time(o) {
         if (wait == 0) {
