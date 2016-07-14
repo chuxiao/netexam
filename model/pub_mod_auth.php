@@ -420,7 +420,7 @@ class pub_mod_auth
         $code = new mod_captcha;
         $auth_code = $code->make_seccode(6);
         $cookie_data = array('user_id' => $account, 'timestamp' => time(), 'acaptcha' => $code->authcode($auth_code, 'ENCODE', $GLOBALS['config']['cookie_pwd']), 0);
-        $cookie_expire = $cookie_expire == 0 ? 0 : time() + MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE;
+        $cookie_expire = time() + MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE;
         $value         = implode(':', $cookie_data);
         /* 签名 */
         $value .=":" . md5($value . self::$sign_key);

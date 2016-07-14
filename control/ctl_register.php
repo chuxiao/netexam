@@ -72,13 +72,15 @@ class ctl_register
         {
             pub_mod_auth::check_captcha($form);
             // 发送手机验证码
-            $mobile_key = pub_mod_auth::get_mobile_key();
+            $user_id = $form['account'];
+            $mobile_key = pub_mod_auth::make_account_code($user_id);
             $msg = "【创蓝文化】您的验证码是: ".$mobile_key.",请立即使用.";
-            $user_id = $fom['account'];
-            $url = $GLOBALS['config']['mobile_key']['url'].'account='.$GLOBALS['config']['mobile_key']['account'].'&pswd='.$GLOBALS['config']['mobile_key']['passwd'].'&mobile='.$user_id.'&msg='.$msg.'&needstatus=true';
-            $ret = file_get_contents($url);
+            require_once PATH_LIBRARY . '/ChuanglanSmsHelper/ChuanglanSmsApi.php';
+            $clapi  = new ChuanglanSmsApi();
+            $result = $clapi->sendSMS($user_id, $msg,'true');
+            $result = $clapi->execResult($result);
             $filename = date("Ym").'/'.date("Ymd");
-            log::add($filename, $user_id.'    '.$msg.'    '.$ret);
+            log::add($filename, $user_id.'    '.$mobile_key.'    '.$result[1]);
 
         }
         catch (Exception $e)
