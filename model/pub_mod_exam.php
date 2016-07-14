@@ -51,14 +51,26 @@ class pub_mod_exam
 
     public static function get_next_exam_info($time)
     {
-        $sql = "SELECT * FROM exam WHERE effect_time >= '".$time."' ORDER BY id ASC";
-        db::query($sql);
-        return db::fetch_one();
+        $datetime = date('Y-m-d H:i:s', $time);
+        return get_next_exam_info2($datetime);
     }
 
     public static function get_prev_exam_info($time)
     {
-        $sql = "SELECT * FROM exam WHERE effect_time < '".$time."' ORDER BY id DESC";
+        $datetime = date('Y-m-d H:i:s', $time);
+        return get_prev_exam_info2($datetime);
+    }
+
+    public static function get_next_exam_info2($datetime)
+    {
+        $sql = "SELECT * FROM exam WHERE effect_time >= '".$datetime."' ORDER BY id ASC";
+        db::query($sql);
+        return db::fetch_one();
+    }
+
+    public static function get_prev_exam_info2($datetime)
+    {
+        $sql = "SELECT * FROM exam WHERE effect_time < '".$datetime."' ORDER BY id DESC";
         db::query($sql);
         return db::fetch_one();
     }

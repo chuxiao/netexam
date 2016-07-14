@@ -39,16 +39,19 @@ class ctl_rank
         if ($rank_list == false)
         {
             $rank_list = pub_mod_score::get_exam_score_top($eid, 10);
-            for ($i = 0; $i < count($rank_list); ++$i)
+            if ($rank_list != false)
             {
-                $user_detail = pub_mod_user::get_one_user_details($rank_list[$i]['user_id']);
-                $rank_list[$i]['user_name'] = $user_detail['nickname'];
-                $rank_list[$i]['rank'] = $i + 1;
+                for ($i = 0; $i < count($rank_list); ++$i)
+                {
+                    $user_detail = pub_mod_user::get_one_user_details($rank_list[$i]['user_id']);
+                    $rank_list[$i]['user_name'] = $user_detail['nickname'];
+                    $rank_list[$i]['rank'] = $i + 1;
+                }
+                cache::set("rank", $eid, $rank_list);
             }
-            cache::set("rank", $eid, $rank_list);
         }
         $prev_eid = 0;
-        $prev_exam = pub_mod_exam::get_prev_exam_info($current_exam['effect_time']);
+        $prev_exam = pub_mod_exam::get_prev_exam_info2($current_exam['effect_time']);
         if ($prev_exam)
         {
             $prev_eid = $prev_exam['id'];

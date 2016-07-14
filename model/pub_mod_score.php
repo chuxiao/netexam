@@ -21,10 +21,18 @@ class pub_mod_score
             $sql = "SELECT *FROM user_exam_0".$i." WHERE eid = ".$eid." ORDER BY score DESC LIMIT ".$top;
             db::query($sql);
             $query_result = db::fetch_all();
+            if ($query_result == false)
+            {
+                continue;
+            }
             $tmp_results[] = $query_result;
             $idx_arr[] = 0;
             $count_arr[] = count($query_result);
             $total_count += $count_arr[$i];
+        }
+        if ($total_count == 0)
+        {
+            return false;
         }
         if ($top > $total_count)
         {

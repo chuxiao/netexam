@@ -8,11 +8,13 @@
     <th>分数</th>
     <th>名次</th>
 </tr>
-<{foreach item=item from=$rank_list}>
-<tr>
-    <td><{$item.user_name}></td>
-    <td><{$item.score}></td>
-    <td><{$item.rank}></td>
-</tr>
-<{/foreach}>
+<{if $rank_list}>
+    <{foreach item=item from=$rank_list}>
+    <tr>
+        <td><{$item.user_name}></td>
+        <td><{$item.score}></td>
+        <td><{$item.rank}></td>
+    </tr>
+    <{/foreach}>
+<{/if}>
 <{include file="footer.tpl"}>
