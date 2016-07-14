@@ -3,7 +3,7 @@
     <p>当前题号: <span id="current_no"><{$question.qid}></span></p>
     <p>总题数: <{$total_count}></p>
     <p>本题分值: <span id="current_socre"><{$question.score}></span></p>
-    <p><input type="button" onClick="next_question()">下一题</input>
+    <p><input type="button" onClick="next_question()" value="下一题" />
 </div>
 <div>
 <p>剩余时间:<span id="timer"><{$question.timer}></span></p>
@@ -63,7 +63,7 @@
 
 <script type="text/javascript">
     var total = <{$total_count}>;
-    var answer = <{$question.answer}>;
+    var answer = "<{$question.answer}>";
     var time_left = <{$question.timer}>;
     var time_keep = <{$question.keep_time}>;
     var eid = <{$question.eid}>;
@@ -104,7 +104,7 @@
             }
             else
             {
-                $("#timer").val(time_left);
+                $("#timer").text(time_left);
                 --time_left;
             }
         }
@@ -177,7 +177,7 @@
         {
             result += "J";
         }
-        .getJSON("/?ct=exam&ac=next_q&result=" + result + "&eid=" + eid + "&qid=" + qid,
+        $.getJSON("/?ct=exam&ac=next_q&result=" + result + "&eid=" + eid + "&qid=" + qid,
             function(data)
             {
                 if (date.ret == 2)
@@ -218,11 +218,11 @@
         $("#C_H").prop("checked", false);
         $("#C_I").prop("checked", false);
         $("#C_J").prop("checked", false);
-        $("#C_A span").val(A);
-        $("#C_B span").val(B);
+        $("#C_A span").text(A);
+        $("#C_B span").text(B);
         if (C != null)
         {
-            $("#C_C span").val(C);
+            $("#C_C span").text(C);
             $("#C_C").show();
         }
         else
@@ -232,7 +232,7 @@
 
         if (D != null)
         {
-            $("#C_D span").val(D);
+            $("#C_D span").text(D);
             $("#C_D").show();
         }
         else
@@ -242,7 +242,7 @@
 
         if (E != null)
         {
-            $("#C_E span").val(E);
+            $("#C_E span").text(E);
             $("#C_E").show();
         }
         else
@@ -252,7 +252,7 @@
 
         if (F != null)
         {
-            $("#C_F span").val(F);
+            $("#C_F span").text(F);
             $("#C_F").show();
         }
         else
@@ -262,7 +262,7 @@
 
         if (G != null)
         {
-            $("#C_G span").val(G);
+            $("#C_G span").text(G);
             $("#C_G").show();
         }
         else
@@ -272,7 +272,7 @@
 
         if (H != null)
         {
-            $("#C_H span").val(H);
+            $("#C_H span").text(H);
             $("#C_H").show();
         }
         else
@@ -282,7 +282,7 @@
 
         if (I != null)
         {
-            $("#C_I span").val(I);
+            $("#C_I span").text(I);
             $("#C_I").show();
         }
         else
@@ -292,7 +292,7 @@
 
         if (J != null)
         {
-            $("#C_J span").val(J);
+            $("#C_J span").text(J);
             $("#C_J").show();
         }
         else
@@ -300,8 +300,8 @@
             $("#C_J").hide();
         }
         $("#show_answer").hide();
-        $("#current_no").val(qid);
-        $("#current_score").val(score);
+        $("#current_no").text(qid);
+        $("#current_score").text(score);
     }
 </script>
 <{include file="footer.tpl"}>
