@@ -14,7 +14,7 @@ class pub_mod_answer
     public static function get_question_answer_duration($user_id, $begin_time, $end_time)
     {
         $table_name = pub_mod_common::get_split_table($user_id, "user_answer");
-        $sql = "SELECT *FROM ".$table_name." WHERE create_time >= ".$begin_time." AND create_time <= ".$end_time;
+        $sql = "SELECT *FROM ".$table_name." WHERE create_time >= '".$begin_time."' AND create_time <= '".$end_time."'";
         db::query($sql);
         return db::fetch_all();
     }

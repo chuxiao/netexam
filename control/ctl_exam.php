@@ -124,25 +124,28 @@ class ctl_exam
             exit();
         }
         $begin_time = $current_exam['effect_time'];
-        $end_time = time();
-        $accout = pub_mod_auth::get_current_user_id();
+        $end_time = date("Y-m-d H:i:s");
+        $account = pub_mod_auth::get_current_user_id();
         $answers = pub_mod_answer::get_question_answer_duration($account, $begin_time, $end_time);
         $right = 0;
         $wrong = 0;
         $total_score = 0;
-        foreach ($answers as $v)
+        if ($answers != false)
         {
-            if ($v['score'] > 0)
+            foreach ($answers as $v)
             {
-                ++$right;
-                $total_score += $v['score'];
-            }
-            else
-            {
-                ++$wrong;
+                if ($v['score'] > 0)
+                {
+                    ++$right;
+                    $total_score += $v['score'];
+                }
+                else
+                {
+                    ++$wrong;
+                }
             }
         }
-        pub_mod_score::insert_exam_score($accout, $eid, $total_score);
+        pub_mod_score::insert_exam_score($account, $eid, $total_score);
         tpl::assign("right", $right);
         tpl::assign("wrong", $wrong);
         tpl::assign("total_score", $total_score);

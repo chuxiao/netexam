@@ -184,7 +184,7 @@
             {
                 if (data.ret == 2)
                 {
-                    document.location.href = "/?ct=exam&ac=over&$eid=" + eid;
+                    document.location.href = "/?ct=exam&ac=over&eid=" + eid;
                     return;
                 }
                 eid = data.eid;
