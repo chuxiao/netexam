@@ -39,7 +39,7 @@ $GLOBALS['config']['log'] = array(
 //cache配置(df_prifix建议按网站名分开,如mc_114la_ / mc_tuan_ 等)
 //cache_type一般是memcache，如无可用则用file，如有条件，用memcached
 $GLOBALS['config']['cache'] = array(
-    'enable'            => false,
+    'enable'            => true,
     'cache_type'        => 'memcache',
     'cache_time'        => 7200,
     'file_cachename'    => PATH_CACHE.'/cfc_data',
