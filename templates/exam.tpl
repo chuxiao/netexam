@@ -110,12 +110,13 @@
         }
         else if (phase == 2)
         {
+            $("#timer").text(0);
             // 反馈倒计时
             if (time_keep == 0)
             {
+                phase = 1;
                 // 更新题目
                 update_question();
-                phase = 1;
             }
             else
             {
