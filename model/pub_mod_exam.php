@@ -52,13 +52,13 @@ class pub_mod_exam
     public static function get_next_exam_info($time)
     {
         $datetime = date('Y-m-d H:i:s', $time);
-        return get_next_exam_info2($datetime);
+        return self::get_next_exam_info2($datetime);
     }
 
     public static function get_prev_exam_info($time)
     {
         $datetime = date('Y-m-d H:i:s', $time);
-        return get_prev_exam_info2($datetime);
+        return self::get_prev_exam_info2($datetime);
     }
 
     public static function get_next_exam_info2($datetime)
