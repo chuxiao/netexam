@@ -82,7 +82,7 @@ class ctl_exam
         {
             $score = 0;
         }
-        $accout = pub_mod_auth::get_current_user_id();
+        $account = pub_mod_auth::get_current_user_id();
         pub_mod_answer::insert_question_answer($account, $id, $result, $score);
         $current_exam = cache::get("exam", $eid);
         if ($current_exam == false)
