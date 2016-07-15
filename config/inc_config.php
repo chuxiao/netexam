@@ -40,7 +40,7 @@ $GLOBALS['config']['log'] = array(
 //cache_type一般是memcache，如无可用则用file，如有条件，用memcached
 $GLOBALS['config']['cache'] = array(
     'enable'            => true,
-    'cache_type'        => 'memcache',
+    'cache_type'        => 'memcached',
     'cache_time'        => 7200,
     'file_cachename'    => PATH_CACHE.'/cfc_data',
     'df_prefix'         => 'mc_df_',
