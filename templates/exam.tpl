@@ -7,7 +7,7 @@
 </div>
 <div>
 <p>剩余时间:<span id="timer"><{$question.timer}></span></p>
-<p><{$question.question}><p>
+<p id="question"><{$question.question}><p>
 <p id="A"><input id="C_A" name="choice" type="checkbox" value="A" />A: <span class="option"><{$question.A}></span></p>
 <p id="B"><input id="C_B" name="choice" type="checkbox" value="B" />B: <span class="option"><{$question.B}></span></p>
 
@@ -85,6 +85,7 @@
     {
         // 显示正确答案
         $("#show_answer").show();
+        $("#timer").text(0);
         phase = 2;
         // 提交结果并获取下一道题目信息
         commit_and_next();
@@ -181,7 +182,7 @@
         $.getJSON("/?ct=exam&ac=next_q&result=" + result + "&eid=" + eid + "&qid=" + qid,
             function(data)
             {
-                if (date.ret == 2)
+                if (data.ret == 2)
                 {
                     document.location.href = "/?ct=exam&ac=over&$eid=" + eid;
                     return;
@@ -219,6 +220,7 @@
         $("#C_H").prop("checked", false);
         $("#C_I").prop("checked", false);
         $("#C_J").prop("checked", false);
+        $("#question").text(question);
         $("#C_A span").text(A);
         $("#C_B span").text(B);
         if (C != null)
