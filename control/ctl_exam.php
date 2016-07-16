@@ -123,8 +123,8 @@ class ctl_exam
             cls_msgbox::show('内部错误', '没有找到相关考试，请联系管理员......', '/?ct=center');
             exit();
         }
-        $begin_time = $current_exam['effect_time'];
-        $end_time = date("Y-m-d H:i:s");
+        $begin_time = strtotime($current_exam['effect_time']);
+        $end_time = time();
         $account = pub_mod_auth::get_current_user_id();
         $answers = pub_mod_answer::get_question_answer_duration($account, $begin_time, $end_time);
         $right = 0;
@@ -132,20 +132,23 @@ class ctl_exam
         $total_score = 0;
         if ($answers != false)
         {
-            foreach ($answers as $v)
+            if ($answers != false)
             {
-                if ($v['score'] > 0)
+                foreach ($answers as $v)
                 {
-                    ++$right;
-                    $total_score += $v['score'];
-                }
-                else
-                {
-                    ++$wrong;
+                    if ($v['score'] > 0)
+                    {
+                        ++$right;
+                        $total_score += $v['score'];
+                    }
+                    else
+                    {
+                        ++$wrong;
+                    }
                 }
             }
+            pub_mod_score::insert_exam_score($account, $eid, $total_score);
         }
-        pub_mod_score::insert_exam_score($account, $eid, $total_score);
         tpl::assign("right", $right);
         tpl::assign("wrong", $wrong);
         tpl::assign("total_score", $total_score);

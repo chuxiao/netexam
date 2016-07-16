@@ -37,7 +37,13 @@ class ctl_center
         $exam_str = "暂无考试信息";
         if ($current_exam != false)
         {
-            $exam_str = "<a href=\"/?ct=exam&eid=".$current_exam['id']."&qid=1\">开始考试</a>";
+            $effect_time = strtotime($current_exam['effect_time']);
+            $user_id = pub_mod_auth::get_current_user_id();
+            $exam_answers = pub_mod_answer::get_question_answer_duration($user_id, $effect_time, $now);
+            if ($exam_answers == false)
+            {
+                $exam_str = "<a href=\"/?ct=exam&eid=".$current_exam['id']."&qid=1\">开始考试</a>";
+            }
         }
         else
         {
@@ -48,7 +54,7 @@ class ctl_center
             }
         }
         $rank_str = "暂无排行榜信息";
-        $prev_exam = pub_mod_exam::get_prev_exam_info($now - 2 * 60 * 60);
+        $prev_exam = pub_mod_exam::get_prev_exam_info($now - 4 * 60 * 60);
         if ($prev_exam != false)
         {
             $rank_str = "<a href=\"/?ct=rank&eid=".$prev_exam['id']."\">查看排行榜</a>";
