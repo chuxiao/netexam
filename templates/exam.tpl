@@ -64,6 +64,7 @@
 <script type="text/javascript">
     var total = <{$total_count}>;
     var answer = "<{$question.answer}>";
+    var answer_time = <{$question.timer}>;
     var time_left = <{$question.timer}>;
     var time_keep = <{$question.keep_time}>;
     var eid = <{$question.eid}>;
@@ -179,7 +180,8 @@
         {
             result += "J";
         }
-        $.getJSON("/?ct=exam&ac=next_q&result=" + result + "&eid=" + eid + "&qid=" + qid,
+        var cost_time = answer_time - time_left;
+        $.getJSON("/?ct=exam&ac=next_q&result=" + result + "&cost=" + cost_time + "&eid=" + eid + "&qid=" + qid,
             function(data)
             {
                 if (data.ret == 2)

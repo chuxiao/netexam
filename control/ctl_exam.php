@@ -65,6 +65,7 @@ class ctl_exam
         $eid = req::item('eid', 0);
         $qid = req::item('qid', 0);
         $result = req::item('result', '');
+        $cost = req::item('cost', 1);
         if ($eid == 0 || $qid == 0)
         {
             cls_msgbox::show('参数错误', '正在为您跳转......', '/?ct=center');
@@ -77,10 +78,13 @@ class ctl_exam
             exit();
         }
         $id = $current_question['id'];
-        $score = $current_question['score'];
         if ($result != $current_question['answer'])
         {
             $score = 0;
+        }
+        else
+        {
+            $score = $current_question['score'] * 10 * ($current_question['timer'] - $cost) / $current_question['timer'];
         }
         $account = pub_mod_auth::get_current_user_id();
         pub_mod_answer::insert_question_answer($account, $id, $result, $score);
@@ -147,7 +151,7 @@ class ctl_exam
                     }
                 }
             }
-            pub_mod_score::insert_exam_score($account, $eid, $total_score);
+            pub_mod_score::insert_exam_score($account, $eid, $total_score / 10);
         }
         tpl::assign("right", $right);
         tpl::assign("wrong", $wrong);
