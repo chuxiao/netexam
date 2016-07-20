@@ -1,6 +1,6 @@
 <{include file="header.tpl"}>
 <{if $prev_eid ne 0}>
-    <a href="/?ct=rank&ac=<{$prev_eid}>">查看上一期排行榜</a>
+    <a href="/?ct=rank&eid=<{$prev_eid}>">查看上一期排行榜</a>
 <{/if}>
 <table border="1">
 <tr>

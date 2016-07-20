@@ -23,7 +23,7 @@ class pub_mod_score
             $query_result = db::fetch_all();
             if ($query_result == false)
             {
-                continue;
+                $query_result = array();
             }
             $tmp_results[] = $query_result;
             $idx_arr[] = 0;
@@ -42,9 +42,18 @@ class pub_mod_score
         for ($i = 0; $i < $top; ++$i)
         {
             $idx = 0;
-            $tmp_score = $tmp_results[$idx][$idx_arr[$idx]]['score'];
-            for ($j = 1; $j < 8; ++$j)
+            $tmp_score = 0;
+            while ($idx_arr[$idx] >= $count_arr[$idx])
             {
+                ++$idx;
+            }
+            $tmp_score = $tmp_results[$idx][$idx_arr[$idx]]['score'];
+            for ($j = $idx + 1; $j < 8; ++$j)
+            {
+                if ($idx_arr[$j] >= $count_arr[$j])
+                {
+                    continue;
+                }
                 $tmp_score2 = $tmp_results[$j][$idx_arr[$j]]['score'];
                 if ($tmp_score < $tmp_score2)
                 {
@@ -52,7 +61,10 @@ class pub_mod_score
                     $idx = $j;
                 }
             }
-            $result[] = $tmp_results[$idx][$idx_arr[$idx]];
+            if ($tmp_score != 0)
+            {
+                $result[] = $tmp_results[$idx][$idx_arr[$idx]];
+            }
             ++$idx_arr[$idx];
         }
         return $result;
