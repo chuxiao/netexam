@@ -15,7 +15,8 @@ class ctl_logout
 
     public function index()
     {
-        // TODO: 清空session信息
+        // 清空session信息
+        pub_mod_auth::logout_cookie();
         exit(header("location: /?ct=login"));
     }
 }
