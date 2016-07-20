@@ -463,25 +463,15 @@ class mod_captcha {
         echo $image;
     }
 
-    function random($length, $numeric = 0) {
-        $seed = base_convert(md5(microtime().$_SERVER['DOCUMENT_ROOT']), 16, $numeric ? 10 : 35);
-        $seed = $numeric ? (str_replace('0', '', $seed).'012340567890') : ($seed.'zZ'.strtoupper($seed));
-        $hash = '';
+    function make_seccode($length = 6, $numeric = 0)
+    {
+        $timestamp = microtime();
+        $seed = md5($timestamp.$_SERVER['DOCUMENT_ROOT']).md5($timestamp."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+        $seed = base_convert($seed, 16, $numeric ? 10 : 36);
+        $seccode = "";
         $max = strlen($seed) - 1;
         for($i = 0; $i < $length; $i++) {
-            $hash .= $seed{mt_rand(0, $max)};
-        }
-        return $hash;
-    }
-
-    function make_seccode($seccodeunits = 'BCEFGHJKMPQRTVWXY2346789', $length = 6)
-    {
-        $seccode = $this->random(6, 1);//6位的随机数字
-        $s = sprintf("%0{$length}s", base_convert($seccode, 10, 24));
-        $seccode = '';
-        for($i = 0; $i < $length; $i++) {
-            $unit = ord($s{$i});
-            $seccode .= ($unit >= 0x30 && $unit <= 0x39) ? $seccodeunits[$unit - 0x30] : $seccodeunits[$unit - 0x57];
+            $seccode .= $seed{mt_rand(0, $max)};
         }
         return $seccode;
     }

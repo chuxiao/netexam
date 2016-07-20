@@ -390,7 +390,7 @@ class pub_mod_auth
     public static function make_verify_code()
     {
         $code = new mod_captcha;
-        $code->code = $code->make_seccode('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnobqrstuvwxyz1234567890', 4);                           // 验证码
+        $code->code = $code->make_seccode(4, 0);                           // 验证码
         $cookie = $code->authcode($code->code, 'ENCODE', $GLOBALS['config']['cookie_pwd']);
         setcookie(self::$cookie_captcha, $cookie, 0);
         $code->type = 0;                                               // 0英文图片验证码 1中文图片验证码 2Flash 验证码 3语音验证码 4位图验证码
@@ -418,7 +418,7 @@ class pub_mod_auth
     public static function make_account_code($account)
     {
         $code = new mod_captcha;
-        $auth_code = $code->make_seccode('1234567890', 6);                           // 验证码
+        $auth_code = $code->make_seccode(6, 10);                           // 验证码
         $cookie_data = array('user_id' => $account, 'timestamp' => time(), 'acaptcha' => $code->authcode($auth_code, 'ENCODE', $GLOBALS['config']['cookie_pwd']), 0);
         $cookie_expire = time() + MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE;
         $value         = implode(':', $cookie_data);
