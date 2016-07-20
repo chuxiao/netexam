@@ -84,7 +84,7 @@ class ctl_exam
         }
         else
         {
-            $score = $current_question['score'] * 10 * ($current_question['timer'] - $cost) / $current_question['timer'];
+            $score = (int)($current_question['score'] * 10 * ($current_question['timer'] - $cost) / $current_question['timer']);
         }
         $account = pub_mod_auth::get_current_user_id();
         pub_mod_answer::insert_question_answer($account, $id, $result, $score);
@@ -151,11 +151,11 @@ class ctl_exam
                     }
                 }
             }
-            pub_mod_score::insert_exam_score($account, $eid, $total_score / 10);
+            pub_mod_score::insert_exam_score($account, $eid, (int)($total_score / 10));
         }
         tpl::assign("right", $right);
         tpl::assign("wrong", $wrong);
-        tpl::assign("total_score", $total_score);
+        tpl::assign("total_score", (int)($total_score / 10));
         tpl::display("exam_stat.tpl");
     }
 }
