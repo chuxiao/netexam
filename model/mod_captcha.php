@@ -467,11 +467,27 @@ class mod_captcha {
     {
         $timestamp = microtime();
         $seed = md5($timestamp.$_SERVER['DOCUMENT_ROOT']).md5($timestamp."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
-        $seed = base_convert($seed, 16, $numeric ? 10 : 36);
+        $seed = base_convert($seed, 16, 35).'z';
         $seccode = "";
         $max = strlen($seed) - 1;
         for($i = 0; $i < $length; $i++) {
-            $seccode .= $seed{mt_rand(0, $max)};
+            $c = $seed{mt_rand(0, $max)};
+            if ($numeric)
+            {
+                $k = ord($c);
+                if ($k >= 0x30 && $k < 0x3a)
+                {
+                    $seccode .= $c;
+                }
+                else
+                {
+                    $seccode .= $k / 11;
+                }
+            }
+            else
+            {
+                $seccode .= $c;
+            }
         }
         return $seccode;
     }
