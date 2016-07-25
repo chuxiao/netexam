@@ -467,7 +467,7 @@ class mod_captcha {
     {
         $timestamp = microtime();
         $seed = md5($timestamp.$_SERVER['DOCUMENT_ROOT']).md5($timestamp."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
-        $seed = base_convert($seed, 16, 35).'z';
+        $seed = base_convert($seed, 16, 35).'zZ';
         $seccode = "";
         $max = strlen($seed) - 1;
         for($i = 0; $i < $length; $i++) {
@@ -481,7 +481,7 @@ class mod_captcha {
                 }
                 else
                 {
-                    $seccode .= $k / 11;
+                    $seccode .= (int)($k / 13);
                 }
             }
             else

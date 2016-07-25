@@ -418,7 +418,7 @@ class pub_mod_auth
     public static function make_account_code($account)
     {
         $code = new mod_captcha;
-        $auth_code = $code->make_seccode(6, 10);                           // 验证码
+        $auth_code = $code->make_seccode(6, 1);                           // 验证码
         $cookie_data = array('user_id' => $account, 'timestamp' => time(), 'acaptcha' => $code->authcode($auth_code, 'ENCODE', $GLOBALS['config']['cookie_pwd']), 0);
         $cookie_expire = time() + MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE;
         $value         = implode(':', $cookie_data);
