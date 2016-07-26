@@ -134,7 +134,7 @@ class ctl_login
             // 发送手机验证码
             $user_id = $form['account'];
             $mobile_key = pub_mod_auth::make_account_code($user_id);
-            $msg = "【创蓝文化】您的验证码是: ".$mobile_key.",请立即使用.";
+            $msg = "【金顿教育】您的验证码是: ".$mobile_key.",请立即使用.";
             require_once PATH_LIBRARY . '/ChuanglanSmsHelper/ChuanglanSmsApi.php';
             $clapi  = new ChuanglanSmsApi();
             $result = $clapi->sendSMS($user_id, $msg,'true');
