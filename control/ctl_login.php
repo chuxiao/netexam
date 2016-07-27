@@ -73,7 +73,7 @@ class ctl_login
         try
         {
             // 登陆行为
-            pub_mod_auth::authenticate2($form);
+            pub_mod_auth::authenticate_find_passwd($form);
             // P3P
             pub_mod_auth::p3pheader();
             tpl::assign("title", "重置密码");

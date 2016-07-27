@@ -32,7 +32,7 @@ class ctl_register
         $form['auth_code'] = req::item("auth_code", '');
         try
         {
-            pub_mod_register::verify($form);
+            pub_mod_auth::authenticate_register($form);
             pub_mod_register::create_account($form);
             cls_msgbox::show('注册成功', '正在为您跳转......', '/?ct=login');
         }

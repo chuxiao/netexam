@@ -7,59 +7,6 @@ if( !defined('CORE') ) exit('Request Error!');
  */
 class pub_mod_register
 {
-    public static function verify($data)
-    {
-        // 验证码不能为空
-        if (empty($data['code']))
-        {
-            throw new Exception(serialize(array('code' => '验证码不能为空')));
-        }
-        else
-        {
-            if(!isset($_COOKIE['captcha']))
-            {
-                throw new Exception(serialize(array('code' => '生成验证码超时')));
-            }
-            $code = new mod_captcha;
-            $value  = $code->authcode($_COOKIE['captcha'], 'DECODE', $GLOBALS['config']['cookie_pwd']);
-            if (strtolower($data['code'])!=strtolower($value))
-            {
-                throw new Exception(serialize(array('code' => '验证码不正确或超时')));
-            }
-        }
-
-        //验证用户名是否为空
-        if (empty($data['account']))
-        {
-            throw new Exception(serialize(array('account' => '请输入用户名')));
-        }
-        //验证用户名是否被注册
-        if (pub_mod_user::account_exist($data['account']))
-        {
-            throw new Exception(serialize(array('account' => '该用户已被注册')));
-        }
-
-        // 验证密码是否为空
-        if (empty($data['passwd']))
-        {
-            throw new Exception(serialize(array('passwd' => '密码不能为空')));
-        }
-
-        //两次输入密码是否相同
-        if ($data['passwd'] != $data['re_passwd'])
-        {
-            throw new Exception(serialize(array('passwd' => '两次输入密码不同')));
-        }
-
-        //昵称不能为空
-        if (empty($data['nickname']))
-        {
-            throw new Exception(serialize(array('nickname' => '真实姓名不能为空')));
-        }
-
-        return $data;
-    }
-
     /**
      * 注册用户模块
      *

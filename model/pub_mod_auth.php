@@ -145,7 +145,7 @@ class pub_mod_auth
      * @param array $data
      * @return boolean
      */
-    public static function authenticate2($data)
+    public static function authenticate_find_passwd($data)
     {
         // 验证码不能为空
         if (empty($data['code']))
@@ -200,6 +200,69 @@ class pub_mod_auth
         // 设置Cookie
         self::set_logined_cookie(self::$curr_user, $cookie_expire, false);
         return true;
+    }
+
+    public static function authenticate_register($data)
+    {
+        //验证用户名是否为空
+        if (empty($data['account']))
+        {
+            throw new Exception(serialize(array('account' => '请输入用户名')));
+        }
+        //验证用户名是否被注册
+        if (pub_mod_user::account_exist($data['account']))
+        {
+            throw new Exception(serialize(array('account' => '该用户已被注册')));
+        }
+
+        // 验证密码是否为空
+        if (empty($data['passwd']))
+        {
+            throw new Exception(serialize(array('passwd' => '密码不能为空')));
+        }
+
+        //两次输入密码是否相同
+        if ($data['passwd'] != $data['re_passwd'])
+        {
+            throw new Exception(serialize(array('passwd' => '两次输入密码不同')));
+        }
+
+        //昵称不能为空
+        if (empty($data['nickname']))
+        {
+            throw new Exception(serialize(array('nickname' => '真实姓名不能为空')));
+        }
+
+        // 手机验证码
+        if (empty($data['auth_code']))
+        {
+            throw new Exception(serialize(array('auth_code' => '验证码不能为空')));
+        }
+        if (!isset($_COOKIE[self::$cookie_user_code]))
+        {
+            throw new Exception(serialize(array('auth_code' => '手机验证码失效')));
+        }
+        $cookie_decode = self::_decrypt($_COOKIE[self::$cookie_user_code], self::$encrpy_key);
+        parse_str($cookie_decode, $cookie_data);
+        $md5_str = $cookie_data['sign'];
+        unset($cookie_data['sign']);
+        // 验证签名
+        if (md5(http_build_query($cookie_data) . self::$sign_key) != $md5_str)
+        {
+            throw new Exception(serialize(array('auth_code' => '手机验证码验证失败')));
+        }
+        if (time() - $cookie_data['timestamp'] > MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE)
+        {
+            throw new Exception(serialize(array('auth_code' => '手机验证码超时，请重新获取')));
+        }
+        $code = new mod_captcha;
+        $value  = $code->authcode($cookie_data['acaptcha'], 'DECODE', $GLOBALS['config']['cookie_pwd']);
+        if (strtolower($data['auth_code'])!=strtolower($value))
+        {
+            throw new Exception(serialize(array('auth_code' => '手机验证码不正确')));
+        }
+
+        return $data;
     }
 
     /**
