@@ -7,5 +7,5 @@ if ($argc < 3)
 $user_name = $argv[1];
 $password = $argv[2];
 
-$sql = "insert user_admin (user_name, passwd) value ('".$user_name."', '".$password."');\n";
+$sql = "insert user_admin (user_name, passwd) value ('".$user_name."', '".md5($password)."');\n";
 echo $sql;
