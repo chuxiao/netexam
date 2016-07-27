@@ -140,7 +140,7 @@ class ctl_login
             $result = $clapi->sendSMS($user_id, $msg,'true');
             $result = $clapi->execResult($result);
             $filename = date("Ym").'/'.date("Ymd");
-            log::add($filename, $user_id.'    '.$mobile_key.'    '.$result[1]);
+            log::add($filename, date("Y-m-d H:i:s")."\t".$user_id."\t".$mobile_key."\t".$result[1]."\n");
 
         }
         catch (Exception $e)
