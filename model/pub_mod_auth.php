@@ -157,10 +157,11 @@ class pub_mod_auth
             throw new Exception(serialize(array('code' => '手机验证码失效')));
         }
         $cookie_decode = self::_decrypt($_COOKIE[self::$cookie_user_code], self::$encrpy_key);
-        $cookie_data   = explode(":", $cookie_decode);
-        $md5_str       = array_pop($cookie_data);
+        parse_str($cookie_decode, $cookie_data);
+        $md5_str = $cookie_data['sign'];
+        unset($cookie_data['sign']);
         // 验证签名
-        if (md5(implode(":", $cookie_data) . self::$sign_key) != $md5_str)
+        if (md5(http_build_query($cookie_data) . self::$sign_key) != $md5_str)
         {
             throw new Exception(serialize(array('code' => '手机验证码验证失败')));
         }
@@ -419,11 +420,11 @@ class pub_mod_auth
     {
         $code = new mod_captcha;
         $auth_code = $code->make_seccode(6, 1);                           // 验证码
-        $cookie_data = array('user_id' => $account, 'timestamp' => time(), 'acaptcha' => $code->authcode($auth_code, 'ENCODE', $GLOBALS['config']['cookie_pwd']), 0);
+        $cookie_data = array('user_id' => $account, 'timestamp' => time(), 'acaptcha' => $code->authcode($auth_code, 'ENCODE', $GLOBALS['config']['cookie_pwd']));
         $cookie_expire = time() + MYAPI_COOKIE_ACCOUNT_CODE_EXPIRE;
-        $value         = implode(':', $cookie_data);
+        $value         = http_build_query($cookie_data);
         /* 签名 */
-        $value .=":" . md5($value . self::$sign_key);
+        $value .="&sign=" . md5($value . self::$sign_key);
         /* 加密 */
         $value         = self::_encrpy($value, self::$encrpy_key);
 

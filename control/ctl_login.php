@@ -69,7 +69,7 @@ class ctl_login
         $form['code']   = req::item('verify_code');
         $form['login_time'] = time();
         $form['account'] = req::item('account');
-        $form['auth_code'] = req::item('auth_code');
+        $form['code'] = req::item('auth_code');
         try
         {
             // 登陆行为
