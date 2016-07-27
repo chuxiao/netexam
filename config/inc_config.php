@@ -104,7 +104,7 @@ $GLOBALS['config']['upload_dir'] = '/static/uploads';
 
 // 短信验证
 $GLOBALS['config']['mobile_key'] = array(
-    'url' => 'http://222.73.117.169/msg/HttpBatchSendSM?',
+    'url' => 'https://zapi.253.com/msg/HttpBatchSendSM?',
     'account' => 'N9982354',
     'passwd' => 'Psde4e6a',
 );

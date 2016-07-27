@@ -72,6 +72,9 @@ class ChuanglanSmsApi {
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $postFields );
+                // https请求 不验证证书和hosts
+                curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
+                curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, false );
 		$result = curl_exec ( $ch );
 		curl_close ( $ch );
 		return $result;
