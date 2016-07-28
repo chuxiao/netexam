@@ -82,11 +82,12 @@
     var J = "";
     var score = 0;
     var phase = 1;
+    var over_flag = false;
     function next_question()
     {
+        $("#timer").text(0);
         // 显示正确答案
         $("#show_answer").show();
-        $("#timer").text(0);
         phase = 2;
         // 提交结果并获取下一道题目信息
         commit_and_next();
@@ -95,6 +96,7 @@
     {
         if (phase == 1)
         {
+            $("#timer").text(time_left);
             // 答题倒计时
             if (time_left == 0)
             {
@@ -106,19 +108,24 @@
             }
             else
             {
-                $("#timer").text(time_left);
                 --time_left;
             }
         }
         else if (phase == 2)
         {
-            $("#timer").text(0);
             // 反馈倒计时
             if (time_keep == 0)
             {
-                phase = 1;
-                // 更新题目
-                update_question();
+                if (over_flag == false)
+                {
+                    // 更新题目
+                    update_question();
+                    phase = 1;
+                }
+                else
+                {
+                    document.location.href = "/?ct=exam&ac=over&eid=" + eid;
+                }
             }
             else
             {
@@ -186,7 +193,7 @@
             {
                 if (data.ret == 2)
                 {
-                    document.location.href = "/?ct=exam&ac=over&eid=" + eid;
+                    over_flag = true;
                     return;
                 }
                 eid = data.eid;
@@ -223,87 +230,88 @@
         $("#C_I").prop("checked", false);
         $("#C_J").prop("checked", false);
         $("#question").text(question);
-        $("#C_A span").text(A);
-        $("#C_B span").text(B);
+        $("#A span").text(A);
+        $("#B span").text(B);
         if (C != null)
         {
-            $("#C_C span").text(C);
-            $("#C_C").show();
+            $("#C span").text(C);
+            $("#C").show();
         }
         else
         {
-            $("#C_C").hide();
+            $("#C").hide();
         }
 
         if (D != null)
         {
-            $("#C_D span").text(D);
-            $("#C_D").show();
+            $("#D span").text(D);
+            $("#D").show();
         }
         else
         {
-            $("#C_D").hide();
+            $("#D").hide();
         }
 
         if (E != null)
         {
-            $("#C_E span").text(E);
-            $("#C_E").show();
+            $("#E span").text(E);
+            $("#E").show();
         }
         else
         {
-            $("#C_E").hide();
+            $("#E").hide();
         }
 
         if (F != null)
         {
-            $("#C_F span").text(F);
-            $("#C_F").show();
+            $("#F span").text(F);
+            $("#F").show();
         }
         else
         {
-            $("#C_F").hide();
+            $("#F").hide();
         }
 
         if (G != null)
         {
-            $("#C_G span").text(G);
-            $("#C_G").show();
+            $("#G span").text(G);
+            $("#G").show();
         }
         else
         {
-            $("#C_G").hide();
+            $("#G").hide();
         }
 
         if (H != null)
         {
-            $("#C_H span").text(H);
-            $("#C_H").show();
+            $("#H span").text(H);
+            $("#H").show();
         }
         else
         {
-            $("#C_H").hide();
+            $("#H").hide();
         }
 
         if (I != null)
         {
-            $("#C_I span").text(I);
-            $("#C_I").show();
+            $("#I span").text(I);
+            $("#I").show();
         }
         else
         {
-            $("#C_I").hide();
+            $("#I").hide();
         }
 
         if (J != null)
         {
-            $("#C_J span").text(J);
-            $("#C_J").show();
+            $("#J span").text(J);
+            $("#J").show();
         }
         else
         {
-            $("#C_J").hide();
+            $("#J").hide();
         }
+        $("#show_answer").text(answer);
         $("#show_answer").hide();
         $("#current_no").text(qid);
         $("#current_score").text(score);
