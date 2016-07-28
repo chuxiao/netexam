@@ -83,6 +83,7 @@
     var score = 0;
     var phase = 1;
     var over_flag = false;
+    var time_keep_next = 0;
     function next_question()
     {
         $("#timer").text(0);
@@ -212,7 +213,7 @@
                 answer = data.answer;
                 score = data.score;
                 time_left = data.timer;
-                time_keep = data.keep_time;
+                time_keep_next = data.keep_time;
             }
         );
     }
@@ -315,6 +316,7 @@
         $("#show_answer").hide();
         $("#current_no").text(qid);
         $("#current_score").text(score);
+        time_keep = time_keep_next;
     }
 </script>
 <{include file="footer.tpl"}>
