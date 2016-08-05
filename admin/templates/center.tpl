@@ -36,7 +36,7 @@
 </div>
 <script>
     $('#date').combodate({minYear: 2016, maxYear: 2020});
-    $('#time').combodate({minuteStep: 30});
+    $('#time').combodate({minuteStep: 5});
 </script>
 <a href="/admin/?ct=login&ac=logout">注销</a>
 <{include file="footer.tpl"}>

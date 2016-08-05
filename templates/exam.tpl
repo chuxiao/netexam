@@ -197,6 +197,11 @@
                     over_flag = true;
                     return;
                 }
+                else if (data.ret < 0)
+                {
+                    document.location.href = "/?ct=center";
+                    return;
+                }
                 eid = data.eid;
                 qid = data.qid;
                 question = data.question;

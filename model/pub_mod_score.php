@@ -69,4 +69,12 @@ class pub_mod_score
         }
         return $result;
     }
+
+    public static function get_exam_score($user_id, $eid)
+    {
+        $table_name = pub_mod_common::get_split_table($user_id, "user_exam");
+        $sql = 'SELECT *FROM '.$table_name.' WHERE user_id = '.$user_id.' AND eid = '.$eid;
+        db::query($sql);
+        return db::fetch_one();
+    }
 }

@@ -26,7 +26,7 @@ class ctl_center
             foreach ($exams as $exam)
             {
                 $effect_time = strtotime($exam['effect_time']);
-                $end_time = $effect_time + 2 * 60 * 60;
+                $end_time = $effect_time + 10 * 60;
                 if ($now >= $effect_time && $now < $end_time)
                 {
                     $current_exam = $exam;
@@ -39,10 +39,15 @@ class ctl_center
         {
             $effect_time = strtotime($current_exam['effect_time']);
             $user_id = pub_mod_auth::get_current_user_id();
-            $exam_answers = pub_mod_answer::get_question_answer_duration($user_id, $effect_time, $now);
-            if ($exam_answers == false)
+            $eid = $current_exam['id'];
+            $exam_score = pub_mod_score::get_exam_score($user_id, $eid);
+            if ($exam_score == false)
             {
-                $exam_str = "<a href=\"/?ct=exam&eid=".$current_exam['id']."&qid=1\">开始考试</a>";
+                $exam_str = "<a href=\"/?ct=exam&eid=".$eid."\">开始考试</a>";
+            }
+            else
+            {
+                $exam_str = "<a href=\"/?ct=exam&ac=over&eid=".$eid."\">查看考试结果</a>";
             }
         }
         else
@@ -54,7 +59,7 @@ class ctl_center
             }
         }
         $rank_str = "暂无排行榜信息";
-        $prev_exam = pub_mod_exam::get_prev_exam_info($now - 4 * 60 * 60);
+        $prev_exam = pub_mod_exam::get_prev_exam_info($now - 40 * 60);
         if ($prev_exam != false)
         {
             $rank_str = "<a href=\"/?ct=rank&eid=".$prev_exam['id']."\">查看排行榜</a>";
