@@ -47,7 +47,12 @@ class ctl_center
             }
             else
             {
-                $exam_str = "<a href=\"/?ct=exam&ac=over&eid=".$eid."\">查看考试结果</a>";
+                $exam_str = "<a href=\"/?ct=exam&ac=over&eid=".$eid."\">查看考试结果";
+                $next_exam = pub_mod_exam::get_next_exam_info($now);
+                if ($next_exam != false)
+                {
+                    $exam_str .= ",下一场考试时间: ".$next_exam['effect_time']."</a>";
+                }
             }
         }
         else
