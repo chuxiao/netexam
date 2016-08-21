@@ -5,8 +5,7 @@ class pub_mod_question
 {
     public static function add_question_info($eid, $question, $A, $B, $C, $D, $E, $F, $G, $H, $I, $J, $answer, $score, $timer, $keep_time)
     {
-        $params = array('eid' => $eid, 'question' => $question, 'A' => $A, 'B' => $B, 'C' => $C, 'D' => $D, 'E' => $E, 'G' => $G, 'H' => $H, 'I' => $I, 'J' => $J,
-            'answer' => $answer, 'score' => $score, 'timer' => $timer, 'keep_time' => $keep_time);
+        $params = array('eid' => $eid, 'question' => $question, 'A' => $A, 'B' => $B, 'C' => $C, 'D' => $D, 'E' => $E, 'F' => $F, 'G' => $G, 'H' => $H, 'I' => $I, 'J' => $J, 'answer' => $answer, 'score' => $score, 'timer' => $timer, 'keep_time' => $keep_time);
         db::insert($params, 'question');
     }
 

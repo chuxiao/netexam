@@ -12,7 +12,7 @@ class pub_mod_exam
      */
     public static function get_all_exam_info()
     {
-        $sql = "SELECT * FROM exam";
+        $sql = "SELECT * FROM exam order by effect_time desc";
         db::query($sql);
         return db::fetch_all();
     }

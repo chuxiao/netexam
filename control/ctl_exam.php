@@ -51,6 +51,7 @@ class ctl_exam
             exit();
         }
         $count = $current_exam['question_count'];
+        $qid = 1;
         $current_question = cache::get("question", $eid."_".$qid);
         if ($current_question == false)
         {

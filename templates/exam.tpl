@@ -3,7 +3,7 @@
     <p>当前题号: <span id="current_no"><{$question.qid}></span></p>
     <p>总题数: <{$total_count}></p>
     <p>本题分值: <span id="current_socre"><{$question.score}></span></p>
-    <p><input type="button" onClick="next_question()" value="下一题" />
+    <p><input id="next_button" type="button" onClick="next_question()" value="下一题" />
 </div>
 <div>
 <p>剩余时间:<span id="timer"><{$question.timer}></span></p>
@@ -70,22 +70,23 @@
     var eid = <{$question.eid}>;
     var qid = <{$question.qid}>;
     var question = "";
-    var A = "";
-    var B = "";
-    var C = "";
-    var D = "";
-    var E = "";
-    var F = "";
-    var G = "";
-    var H = "";
-    var I = "";
-    var J = "";
+    var A = "<{$question.A}>";
+    var B = "<{$question.B}>";
+    var C = "<{$question.C}>";
+    var D = "<{$question.D}>";
+    var E = "<{$question.E}>";
+    var F = "<{$question.F}>";
+    var G = "<{$question.G}>";
+    var H = "<{$question.H}>";
+    var I = "<{$question.I}>";
+    var J = "<{$question.J}>";
     var score = 0;
     var phase = 1;
     var over_flag = false;
     var time_keep_next = 0;
     function next_question()
     {
+        $("#next_button").attr("disabled", true);
         $("#timer").text(0);
         // 显示正确答案
         $("#show_answer").show();
@@ -122,6 +123,7 @@
                     // 更新题目
                     update_question();
                     phase = 1;
+                    $("#next_button").attr("disabled", false);
                 }
                 else
                 {
@@ -238,7 +240,7 @@
         $("#question").text(question);
         $("#A span").text(A);
         $("#B span").text(B);
-        if (C != null)
+        if (validate(C))
         {
             $("#C span").text(C);
             $("#C").show();
@@ -248,7 +250,7 @@
             $("#C").hide();
         }
 
-        if (D != null)
+        if (validate(D))
         {
             $("#D span").text(D);
             $("#D").show();
@@ -258,7 +260,7 @@
             $("#D").hide();
         }
 
-        if (E != null)
+        if (validate(E))
         {
             $("#E span").text(E);
             $("#E").show();
@@ -268,7 +270,7 @@
             $("#E").hide();
         }
 
-        if (F != null)
+        if (validate(F))
         {
             $("#F span").text(F);
             $("#F").show();
@@ -278,7 +280,7 @@
             $("#F").hide();
         }
 
-        if (G != null)
+        if (validate(G))
         {
             $("#G span").text(G);
             $("#G").show();
@@ -288,7 +290,7 @@
             $("#G").hide();
         }
 
-        if (H != null)
+        if (validate(H))
         {
             $("#H span").text(H);
             $("#H").show();
@@ -298,7 +300,7 @@
             $("#H").hide();
         }
 
-        if (I != null)
+        if (validate(I))
         {
             $("#I span").text(I);
             $("#I").show();
@@ -308,7 +310,7 @@
             $("#I").hide();
         }
 
-        if (J != null)
+        if (validate(J))
         {
             $("#J span").text(J);
             $("#J").show();
@@ -322,6 +324,10 @@
         $("#current_no").text(qid);
         $("#current_score").text(score);
         time_keep = time_keep_next;
+    }
+    function validate(option)
+    {
+        return (option != null && option != "");
     }
 </script>
 <{include file="footer.tpl"}>

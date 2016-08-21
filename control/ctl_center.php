@@ -26,7 +26,7 @@ class ctl_center
             foreach ($exams as $exam)
             {
                 $effect_time = strtotime($exam['effect_time']);
-                $end_time = $effect_time + 10 * 60;
+                $end_time = $effect_time + 5 * 60;
                 if ($now >= $effect_time && $now < $end_time)
                 {
                     $current_exam = $exam;
@@ -64,7 +64,7 @@ class ctl_center
             }
         }
         $rank_str = "暂无排行榜信息";
-        $prev_exam = pub_mod_exam::get_prev_exam_info($now - 40 * 60);
+        $prev_exam = pub_mod_exam::get_prev_exam_info($now - 35 * 60);
         if ($prev_exam != false)
         {
             $rank_str = "<a href=\"/?ct=rank&eid=".$prev_exam['id']."\">查看排行榜</a>";
