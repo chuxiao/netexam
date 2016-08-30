@@ -78,11 +78,16 @@ class ctl_exam
         {
             $last_answer_question = array_pop($question_answers);
             $last_answer_qid = $last_answer_question['question_id'];
-            for ($i = 0; $i < $count; ++$i)
+            for ($i = 2; $i <= $count; ++$i)
             {
-                if ($questions[$i]['id'] > $last_answer_qid)
+                $current_question = cache::get("question", $eid."_".$i);
+                if ($current_question == false)
                 {
-                    $current_question = $questions[$i];
+                    cls_msgbox::show('内部错误', '没有找到相关考题，请联系管理员......', '/?ct=center');
+                    exit();
+                }
+                if ($current_question['id'] > $last_answer_qid)
+                {
                     break;
                 }
             }
