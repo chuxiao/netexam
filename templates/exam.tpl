@@ -319,7 +319,7 @@
         {
             $("#J").hide();
         }
-        $("#show_answer").text(answer);
+        $("#answer").text(answer);
         $("#show_answer").hide();
         $("#current_no").text(qid);
         $("#current_score").text(score);
