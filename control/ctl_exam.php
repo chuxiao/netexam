@@ -84,7 +84,7 @@ class ctl_exam
             $last_answer_qid = $last_answer_question['question_id'];
             for ($i = 1; $i < $count; ++$i)
             {
-                if ($$exam_questions[$i]['id'] > $last_answer_qid)
+                if ($exam_questions[$i]['id'] > $last_answer_qid)
                 {
                     $current_question = $exam_questions[$i];
                     break;
